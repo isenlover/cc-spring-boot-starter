@@ -1,0 +1,18 @@
+#redis configuration
+spring:
+  redis:
+    database: 0
+#    host: localhost     # redis->localhost
+    host: redis     # redis->localhost
+#    host: 192.168.0.107     # redis->localhost
+    password:
+#    pool:
+#      max-active: 8
+#      max-idle: 8
+#      max-wait: 100000
+#      min-idle: 0
+    port: 6379
+#    sentinel:
+#      master:
+#      nodes:
+#    timeout: 60

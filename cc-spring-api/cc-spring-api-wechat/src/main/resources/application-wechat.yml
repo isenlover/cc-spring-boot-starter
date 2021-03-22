@@ -1,0 +1,15 @@
+wechat:
+  url:
+    pay:
+      unifiedOrder: https://api.mch.weixin.qq.com/pay/unifiedorder
+      refund: https://api.mch.weixin.qq.com/secapi/pay/refund
+    oauth:
+      js: https://open.weixin.qq.com/connect/oauth2/authorize
+      accessToken: https://api.weixin.qq.com/sns/oauth2/access_token
+      userInfo: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+    js:
+      ticket: https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi
+  appUrl:
+    accessToken: https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+    refreshToken: https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+    userInfo: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN

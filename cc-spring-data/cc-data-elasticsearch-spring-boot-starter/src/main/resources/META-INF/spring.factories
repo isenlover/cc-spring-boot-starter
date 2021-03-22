@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+pers.cc.elasticsearch.configuration.ElasticsearchAutoConfiguration
+org.springframework.data.repository.core.support.RepositoryFactorySupport=\
+pers.cc.elasticsearch.support.ElasticsearchRepositoryFactory

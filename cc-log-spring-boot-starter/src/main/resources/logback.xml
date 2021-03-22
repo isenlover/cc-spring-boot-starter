@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!--scope="context"  如果添加后会插入elasticsearch-->
+    <springProperty name="logApp" source="log.elk.app" defaultValue=""/>
+    <springProperty name="destination" source="log.elk.destination" defaultValue="localhost:4560"/>
+
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <filter class="pers.cc.spring.log.elk.filter.ELKLogRecordFilter"/>
+        <destination>${destination}</destination>
+        <!--<destination>localhost:4560</destination>-->
+        <!--<destination>192.168.0.107:4560</destination>-->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"${logApp}"}</customFields>
+        </encoder>
+    </appender>
+
+
+    <!--<logger name="org" level="ERROR"/>-->
+    <!--<logger name="com" level="ERROR"/>-->
+    <!--<logger name="springfox" level="ERROR"/>-->
+    <!--<logger name="io" level="ERROR"/>-->
+    <!--<logger name="ch" level="ERROR"/>-->
+
+    <root level="INFO">
+        <appender-ref ref="logstash"/>
+    </root>
+
+</configuration>
