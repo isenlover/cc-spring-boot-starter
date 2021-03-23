@@ -15,6 +15,10 @@ import java.lang.annotation.*;
 @Import(JwtSecurityParamImport.class)
 public @interface JwtSecurityParam {
 
+  /**
+   * 参考 HttpSecurity antMatchers
+   * @return
+   */
   String[] value();
 
   /**
