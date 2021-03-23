@@ -2,9 +2,9 @@ package pers.cc.spring.security.jwt.filter;
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -18,7 +18,7 @@ import pers.cc.spring.core.exception.BaseRuntimeException;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.message.MessageCode;
 import pers.cc.spring.security.jwt.model.JwtUser;
-import pers.cc.spring.security.jwt.properties.JwtProperties;
+import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 import pers.cc.spring.security.jwt.service.JwtService;
 
 import javax.servlet.FilterChain;
@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * com.cc.jwt.security.jwt
@@ -35,6 +36,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ConditionalOnBean(UserDetailsService.class)
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   @Autowired
@@ -44,39 +46,39 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   private JwtService jwtService;
 
   @Autowired
-  JwtProperties jwtProperties;
-
-  private final String tokenHead = "ccToken#";
+  private JwtSecurityParamBean jwtSecurityParamBean;
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      FilterChain chain) throws IOException, ServletException {
-    try {
-      setResponse(response);
-      if (request.getRequestURI().equals("/csrf") || request.getRequestURI().equals("/")) {
-        return;
-      }
-      String authHeader = request.getHeader(jwtProperties.getHttpHeader());
-      if (authHeader != null && authHeader.startsWith(tokenHead)) {
-        final String authToken = authHeader.substring(tokenHead.length());
-        JwtUser jwtUser = jwtService.getUserInfo(request);
-        if (jwtUser != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-          UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUser.getId());
-          if (userDetails != null && jwtService.validateToken(authToken, userDetails)) {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+      HttpServletRequest httpServletRequest,
+      HttpServletResponse httpServletResponse,
+      FilterChain filterChain) throws IOException, ServletException {
+    setResponse(httpServletResponse);
+    String requestURI = httpServletRequest.getRequestURI();
+    if (Arrays.stream(jwtSecurityParamBean.getPermitRequests())
+        .map(s -> s.replace("**", ""))
+        .noneMatch(requestURI::contains)) {
+      try {
+        String authHeader = httpServletRequest.getHeader(jwtSecurityParamBean.getHttpHeader());
+        if (authHeader != null && authHeader.startsWith(jwtSecurityParamBean.getTokenHead())) {
+          final String authToken = authHeader.substring(jwtSecurityParamBean.getTokenHead().length());
+          JwtUser jwtUser = jwtService.getUserInfo(httpServletRequest);
+          if (jwtUser != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUser.getId());
+            if (userDetails != null && jwtService.validateToken(authToken, userDetails)) {
+              UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+                  userDetails.getAuthorities());
+              authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+              SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
           }
         }
+      } catch (Exception e) {
+        processException(e, httpServletResponse);
+        return;
       }
-    } catch (Exception e) {
-      processException(e, response);
-      return;
     }
-    chain.doFilter(request, response);
+    filterChain.doFilter(httpServletRequest, httpServletResponse);
   }
 
   private void processException(Exception exception, HttpServletResponse httpServletResponse) throws IOException {
@@ -90,7 +92,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     } else if (exception instanceof AuthenticationException) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
       httpServletResponse.getWriter().write(JSON.toJSONString(Message.failed().messageCode(MessageCode.UNAUTHORIZED).build()));
-    }  else if (exception instanceof ExpiredJwtException) {
+    } else if (exception instanceof ExpiredJwtException) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
       httpServletResponse.getWriter().write(JSON.toJSONString(Message.failed().messageCode(MessageCode.UNAUTHORIZED_EXPIRED).build()));
     } else {
@@ -114,6 +116,5 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Allow-Headers", "*");
-//    response.setHeader("Access-Control-Allow-Headers", "content-type, *;charset=UTF-8");
   }
 }

@@ -1,8 +1,8 @@
 package pers.cc.spring.security.jwt.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,10 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pers.cc.spring.core.scanner.Scan;
-import pers.cc.spring.security.jwt.handler.CAccessDeniedHandler;
-import pers.cc.spring.security.jwt.handler.CAuthenticationEntryPoint;
 import pers.cc.spring.security.jwt.filter.JwtAuthenticationTokenFilter;
+import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 
 /**
  * 基于token形式的security配置
@@ -25,13 +23,16 @@ import pers.cc.spring.security.jwt.filter.JwtAuthenticationTokenFilter;
  * @author chengce
  * @version 2017-10-08 03:08
  */
-@ComponentScan(Scan.PACKAGE_CC_SPRING_SECURITY_JWT)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ConditionalOnBean(UserDetailsService.class)
 public class JwtSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private UserDetailsService userDetailsService;
+  UserDetailsService userDetailsService;
+
+  @Autowired
+  JwtSecurityParamBean jwtSecurityParamBean;
 
   @Autowired
   public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -94,9 +95,10 @@ public class JwtSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         // 对于获取token的rest api要允许匿名访问
         // FIXME: 2018/6/18 common
         // /csrf 是swagger的一个访问地址  2021.1.22
-        .antMatchers("/auth/**", "/api/**/auth/**", "/api/**/socket/**", "/api/**/common/**", "/socket/**", "/csrf", "/").permitAll()
-        // swagger
-        .antMatchers("/swagger-resources/**", "/v2/api-docs/**", "/webjars/springfox-swagger-ui/**").permitAll()
+        .antMatchers(jwtSecurityParamBean.getPermitRequests()).permitAll()
+//        .antMatchers("/auth/**", "/api/**/auth/**", "/api/**/socket/**", "/api/**/common/**", "/socket/**", "/csrf", "/").permitAll()
+//        // swagger
+//        .antMatchers("/swagger-resources/**", "/v2/api-docs/**", "/webjars/springfox-swagger-ui/**").permitAll()
         // websocket
         .antMatchers("/ws/**").permitAll()
         // 除上面外的所有请求全部需要鉴权认证

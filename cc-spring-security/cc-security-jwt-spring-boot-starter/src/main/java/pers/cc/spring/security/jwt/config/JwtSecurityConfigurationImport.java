@@ -8,8 +8,11 @@ import org.springframework.core.type.AnnotationMetadata;
  * @version 2018-06-15 01:15
  */
 public class JwtSecurityConfigurationImport implements DeferredImportSelector {
-    @Override
-    public String[] selectImports(AnnotationMetadata annotationMetadata) {
-        return new String[]{JwtSecurityConfigurerAdapter.class.getName()};
-    }
+  @Override
+  public String[] selectImports(AnnotationMetadata annotationMetadata) {
+    return new String[]{
+        JwtSecurityConfigurerAdapter.class.getName(),
+        JwtConfiguration.class.getName(),
+    };
+  }
 }

@@ -33,16 +33,6 @@ public class CorsConfig extends WebMvcConfigurationSupport {
     };
   }
 
-//  @Override
-//  protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-//    registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
-//    registry.addResourceHandler("swagger-ui.html")
-//        .addResourceLocations("classpath:/META-INF/resources/");
-//    registry.addResourceHandler("/webjars/**")
-//        .addResourceLocations("classpath:/META-INF/resources/webjars/");
-//    super.addResourceHandlers(registry);
-//  }
-
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("swagger-ui.html")
@@ -54,6 +44,7 @@ public class CorsConfig extends WebMvcConfigurationSupport {
   /**
    * 解决OPTIONS 跨域/403等问题
    * 解决了跨域
+   *
    * @return
    */
   @Bean
@@ -69,14 +60,4 @@ public class CorsConfig extends WebMvcConfigurationSupport {
     bean.setOrder(0);
     return bean;
   }
-
-//  @Override
-//  public void addCorsMappings(CorsRegistry registry) {
-//    registry.addMapping("/api/**")
-//        .allowedOrigins("*")
-//        .allowedMethods("*")
-//        .allowedHeaders("*")
-//        .allowCredentials(true)
-//        .maxAge(3600);
-//  }
 }

@@ -3,11 +3,12 @@ package pers.cc.spring.security.jwt.service.impl;
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pers.cc.spring.core.util.other.ClassUtils;
-import pers.cc.spring.security.jwt.properties.JwtProperties;
+import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 import pers.cc.spring.security.jwt.model.JwtUser;
 import pers.cc.spring.security.jwt.service.JwtService;
 import pers.cc.spring.security.jwt.util.JwtFactory;
@@ -22,6 +23,7 @@ import java.util.*;
  * @version 2017-10-08 01:24
  */
 @Service
+@ConditionalOnBean(JwtSecurityParamBean.class)
 public class JwtServiceImpl implements JwtService {
 
   private final long serialVersionUID = -3301605591108950415L;
@@ -32,18 +34,8 @@ public class JwtServiceImpl implements JwtService {
   private final String CLAIM_KEY_CREATED = "created";
 
   @Autowired
-  JwtProperties jwtProperties;
-  //    @Value("${jwt.secret}")
-  private final String secret = "ccjwtsecret*!@*#)!@&)ewfp192!@#$%^&-";
-
-  //    @Value("${jwt.httpHeader}")
-  private final String tokenHead = "ccToken#";
-
-//    @Value("${jwt.expiration}")
-//    private int expiration;
-//
-//    @Value("${jwt.tokenHead}")
-//    private String tokenHead;
+  JwtSecurityParamBean jwtSecurityParamBean;
+  private final String secret = "c(*$@#(*$(Hfefweof*#)#c";
 
   /**
    * 生成token
@@ -121,7 +113,7 @@ public class JwtServiceImpl implements JwtService {
    * @return 日期
    */
   private Date generatorExpirationDate() {
-    return new Date(System.currentTimeMillis() + jwtProperties.getExpiration() * 1000L);
+    return new Date(System.currentTimeMillis() + jwtSecurityParamBean.getExpiryTime() * 1000L);
   }
 
   /**
@@ -157,9 +149,9 @@ public class JwtServiceImpl implements JwtService {
   }
 
   private String getTokenFromRequest(HttpServletRequest request) {
-    String authHeader = request.getHeader(jwtProperties.getHttpHeader());
-    if (authHeader != null && authHeader.startsWith(tokenHead)) {
-      return authHeader.substring(tokenHead.length());
+    String authHeader = request.getHeader(jwtSecurityParamBean.getHttpHeader());
+    if (authHeader != null && authHeader.startsWith(jwtSecurityParamBean.getTokenHead())) {
+      return authHeader.substring(jwtSecurityParamBean.getTokenHead().length());
     } else {
       throw new JwtException("token解析异常");
     }
@@ -185,7 +177,7 @@ public class JwtServiceImpl implements JwtService {
     claims.put(CLAIM_KEY_USER, jwtUser);
     claims.put(CLAIM_KEY_USER_AUTHORITIES, JSON.toJSONString(jwtUser.getAuthorities()));
     claims.put(CLAIM_KEY_CREATED, new Date());
-    return this.tokenHead + this.generatorToken(claims);
+    return jwtSecurityParamBean.getTokenHead() + this.generatorToken(claims);
   }
 
   @Override
@@ -200,9 +192,9 @@ public class JwtServiceImpl implements JwtService {
 
   @Override
   public JwtUser getUserInfo(HttpServletRequest request) {
-    String authHeader = request.getHeader(jwtProperties.getHttpHeader());
-    if (authHeader != null && authHeader.startsWith(tokenHead)) {
-      String token = authHeader.substring(tokenHead.length());
+    String authHeader = request.getHeader(jwtSecurityParamBean.getHttpHeader());
+    if (authHeader != null && authHeader.startsWith(jwtSecurityParamBean.getTokenHead())) {
+      String token = authHeader.substring(jwtSecurityParamBean.getTokenHead().length());
       return getUserInfo(token);
     } else {
       return null;

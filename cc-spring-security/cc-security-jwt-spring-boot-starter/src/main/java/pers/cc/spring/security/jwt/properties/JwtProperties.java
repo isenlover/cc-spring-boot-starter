@@ -13,13 +13,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class JwtProperties {
 
-  /**
-   * httpHeader
-   */
-  private String httpHeader = "Authorization";
-
-  /**
-   * token有效期，默认30天，单位秒
-   */
-  private int expiration = 2592000;
 }
