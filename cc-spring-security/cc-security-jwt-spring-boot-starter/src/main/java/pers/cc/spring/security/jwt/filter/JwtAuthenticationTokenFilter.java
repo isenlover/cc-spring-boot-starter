@@ -55,6 +55,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws IOException, ServletException {
     setResponse(httpServletResponse);
     String requestURI = httpServletRequest.getRequestURI();
+    if (requestURI.equals("/csrf") || requestURI.equals("/")) {
+      return;
+    }
     if (Arrays.stream(jwtSecurityParamBean.getPermitRequests())
         .map(s -> s.replace("**", ""))
         .noneMatch(requestURI::contains)) {

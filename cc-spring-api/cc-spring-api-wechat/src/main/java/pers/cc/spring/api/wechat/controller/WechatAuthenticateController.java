@@ -34,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
  */
 @Slf4j
 @Controller
-@RequestMapping("${api.version}/auth/wechat")
+@RequestMapping("${api.version}/wechat")
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatAuthenticateController {
 
