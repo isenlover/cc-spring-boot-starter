@@ -4,6 +4,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,10 +23,10 @@ import java.util.Arrays;
  * @author chengce
  * @version 2018-05-10 11:21
  */
-@Service
+@Component
 public class ELKLogBuilder {
 
-  @Autowired
+  @Autowired(required = false)
   JwtService jwtService;
 
 

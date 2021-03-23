@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.*;
  * @author chengce
  * @version 2017-10-08 01:24
  */
+@Primary
 @Service
 @ConditionalOnBean(JwtSecurityParamBean.class)
 public class JwtServiceImpl implements JwtService {

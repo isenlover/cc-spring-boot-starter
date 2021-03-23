@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.security.jwt.annotation.JwtSecurityParam;
 import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
@@ -27,7 +28,7 @@ import static pers.cc.spring.security.jwt.model.DefaultParam.DEFAULT_SWAGGER_PER
  * @version 2018-06-23 15:05
  */
 @Configuration
-@ConditionalOnClass(JwtSecurityParamBean.class)
+@ConditionalOnClass({JwtSecurityParamBean.class, UserDetailsService.class})
 @EnableConfigurationProperties({JwtProperties.class})
 @ComponentScan("pers.cc.spring.security.jwt")
 public class JwtConfiguration {
