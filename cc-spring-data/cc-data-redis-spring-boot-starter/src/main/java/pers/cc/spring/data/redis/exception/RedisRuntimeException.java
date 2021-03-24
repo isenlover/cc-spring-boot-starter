@@ -11,19 +11,19 @@ import pers.cc.spring.core.message.MessageCode;
  */
 public class RedisRuntimeException extends BaseRuntimeException {
 
-    public RedisRuntimeException() {
-        super(MessageCode.SERVER_ERROR_REDIS_EXCEPTION);
-    }
+  public RedisRuntimeException() {
+    super(MessageCode.SERVER_ERROR_REDIS_EXCEPTION);
+  }
 
-    public RedisRuntimeException(MessageCode messageCode) {
-        super(messageCode);
-    }
+  public RedisRuntimeException(MessageCode messageCode) {
+    super(messageCode);
+  }
 
-    public RedisRuntimeException(String message, String errCode, int statusCode) {
-        super(message, errCode, statusCode);
-    }
+  public RedisRuntimeException(String message, String errCode, int statusCode) {
+    super(message, errCode, statusCode);
+  }
 
-    public RedisRuntimeException(String message) {
-        super(message);
-    }
+  public RedisRuntimeException(String message) {
+    super(message);
+  }
 }

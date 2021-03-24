@@ -5,6 +5,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -24,19 +25,8 @@ import pers.cc.spring.core.util.other.StringUtils;
  */
 // 2021.1.22 这里不用自带缓存
 //@EnableCaching
+@ComponentScan("pers.cc.spring.data.redis")
 public class RedisConfiguration extends CachingConfigurerSupport {
-//    @Value("${spring.redis.host:redis}")
-//    private String host;
-//
-//    @Value("${spring.redis.port:6379}")
-//    private int port;
-//
-//    @Value("${spring.redis.timeout:60}")
-//    private int timeout;
-
-//    @Value("${spring.redis.expired:2592000}")
-//    private int expired;
-
   /**
    * 针对 jpaRepository的redis缓存策略
    * 所有参数为key值

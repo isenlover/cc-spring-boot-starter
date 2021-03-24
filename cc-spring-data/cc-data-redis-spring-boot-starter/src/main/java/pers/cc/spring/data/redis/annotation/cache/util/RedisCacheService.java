@@ -2,7 +2,6 @@ package pers.cc.spring.data.redis.annotation.cache.util;
 
 import org.aspectj.lang.JoinPoint;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**

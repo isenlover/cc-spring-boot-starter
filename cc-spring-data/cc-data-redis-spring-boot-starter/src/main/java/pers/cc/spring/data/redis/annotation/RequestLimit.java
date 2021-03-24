@@ -18,22 +18,23 @@ import java.lang.annotation.*;
 @Documented
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public @interface RequestLimit {
-    /**
-     * 允许访问的次数
-     */
-    int count() default 30;
+  /**
+   * 允许访问的次数
+   */
+  int count() default 30;
 
-    /**
-     * 时间段，多少时间段内运行访问count次
-     * 单位秒
-     */
-    long time() default 60;
+  /**
+   * 时间段，多少时间段内运行访问count次
+   * 单位秒
+   */
+  long time() default 60;
 
-    /**
-     * 超出限制后的提示语句
-     * 默认
-     * @see MessageCode#BAD_REQUEST_REQUEST_LIMIT
-     */
-    String message() default "";
+  /**
+   * 超出限制后的提示语句
+   * 默认
+   *
+   * @see MessageCode#BAD_REQUEST_REQUEST_LIMIT
+   */
+  String message() default "";
 
 }

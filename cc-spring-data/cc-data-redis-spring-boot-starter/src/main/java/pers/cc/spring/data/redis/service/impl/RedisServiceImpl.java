@@ -82,6 +82,12 @@ public class RedisServiceImpl implements RedisService {
   }
 
   @Override
+  public <T> Optional<T> getOption(String key) {
+    Object value = getValue(key);
+    return Optional.ofNullable((T) value);
+  }
+
+  @Override
   public boolean exist(String key) {
     try {
       return redisTemplate.hasKey(key);

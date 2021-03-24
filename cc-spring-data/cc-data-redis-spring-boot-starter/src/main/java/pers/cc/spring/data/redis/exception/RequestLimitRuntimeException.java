@@ -10,23 +10,23 @@ import pers.cc.spring.core.message.MessageCode;
  * @version 2018-05-10 12:08
  */
 public class RequestLimitRuntimeException extends BaseRuntimeException {
-    public RequestLimitRuntimeException() {
-        super(MessageCode.BAD_REQUEST_REQUEST_LIMIT);
-    }
+  public RequestLimitRuntimeException() {
+    super(MessageCode.BAD_REQUEST_REQUEST_LIMIT);
+  }
 
-    public RequestLimitRuntimeException(String message, String errCode, int statusCode) {
-        super(message, errCode, statusCode);
-    }
+  public RequestLimitRuntimeException(String message, String errCode, int statusCode) {
+    super(message, errCode, statusCode);
+  }
 
-    public RequestLimitRuntimeException(String message) {
-        super(message);
-    }
+  public RequestLimitRuntimeException(String message) {
+    super(message);
+  }
 
-    public RequestLimitRuntimeException(String message, MessageCode messageCode) {
-        super(message, messageCode);
-    }
+  public RequestLimitRuntimeException(String message, MessageCode messageCode) {
+    super(message, messageCode);
+  }
 
-    public RequestLimitRuntimeException(MessageCode messageCode) {
-        super(messageCode);
-    }
+  public RequestLimitRuntimeException(MessageCode messageCode) {
+    super(messageCode);
+  }
 }

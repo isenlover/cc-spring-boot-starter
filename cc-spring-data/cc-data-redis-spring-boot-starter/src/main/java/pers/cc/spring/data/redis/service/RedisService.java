@@ -3,6 +3,7 @@ package pers.cc.spring.data.redis.service;
 import com.querydsl.core.QueryResults;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,6 +61,14 @@ public interface RedisService {
    * @return 查询结果
    */
   <T> QueryResults<T> getQueryResult(String key);
+
+  /**
+   * 获取 Optional
+   *
+   * @param key 键
+   * @return 查询结果
+   */
+  <T> Optional<T> getOption(String key);
 
   /**
    * 检查是否有此缓存

@@ -17,20 +17,20 @@ import pers.cc.spring.data.redis.service.RedisService;
 @Component
 public class RedisCachePutAspect {
 
-    @Autowired
-    RedisService redisService;
+  @Autowired
+  RedisService redisService;
 
-    @Autowired
-    RedisCacheService redisCacheService;
+  @Autowired
+  RedisCacheService redisCacheService;
 
-    @AfterReturning(value = "execution(* *(..)) && @annotation(redisCachePut)", returning = "result")
-    public void updateRedisCache(JoinPoint joinPoint, RedisCachePut redisCachePut, Object result) {
-        String cacheKey = CommonUtils.getCacheKey(redisCachePut.key(), joinPoint);
-        redisService.remove(cacheKey);
-        if (redisCacheService.canCache(joinPoint, result, redisCachePut.saveBlank(), redisCachePut.condition(),
-                redisCachePut.key())) {
-            redisCacheService.cache(cacheKey, result, redisCachePut.forever(), redisCachePut.time(),
-                    redisCachePut.timeUnit());
-        }
+  @AfterReturning(value = "execution(* *(..)) && @annotation(redisCachePut)", returning = "result")
+  public void updateRedisCache(JoinPoint joinPoint, RedisCachePut redisCachePut, Object result) {
+    String cacheKey = CommonUtils.getCacheKey(redisCachePut.key(), joinPoint);
+    redisService.remove(cacheKey);
+    if (redisCacheService.canCache(joinPoint, result, redisCachePut.saveBlank(), redisCachePut.condition(),
+        redisCachePut.key())) {
+      redisCacheService.cache(cacheKey, result, redisCachePut.forever(), redisCachePut.time(),
+          redisCachePut.timeUnit());
     }
+  }
 }

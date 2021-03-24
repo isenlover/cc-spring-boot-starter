@@ -20,26 +20,26 @@ import java.util.List;
 @Component
 public class RedisCacheEvictAspect {
 
-    @Autowired
-    RedisCacheService redisCacheService;
+  @Autowired
+  RedisCacheService redisCacheService;
 
-    @Autowired
-    RedisService redisService;
+  @Autowired
+  RedisService redisService;
 
 
-    @After(value = "execution(* *(..)) && @annotation(redisCacheEvict)")
-    public void removeRedisCache(JoinPoint joinPoint, RedisCacheEvict redisCacheEvict) {
-        List<String> keys;
-        if (CommonUtils.isNotEmpty(redisCacheEvict.key())) {
-            keys = CommonUtils.getCacheKeys(redisCacheEvict.key(), joinPoint);
-            switch (redisCacheEvict.cacheMethod()) {
-                case DELETE:
-                    redisService.remove(keys);
-                    break;
-                default:
-                    redisService.removeKeys(keys);
-                    break;
-            }
-        }
+  @After(value = "execution(* *(..)) && @annotation(redisCacheEvict)")
+  public void removeRedisCache(JoinPoint joinPoint, RedisCacheEvict redisCacheEvict) {
+    List<String> keys;
+    if (CommonUtils.isNotEmpty(redisCacheEvict.key())) {
+      keys = CommonUtils.getCacheKeys(redisCacheEvict.key(), joinPoint);
+      switch (redisCacheEvict.cacheMethod()) {
+        case DELETE:
+          redisService.remove(keys);
+          break;
+        default:
+          redisService.removeKeys(keys);
+          break;
+      }
     }
+  }
 }

@@ -11,15 +11,15 @@ import lombok.Data;
 @Data
 public class RedisOptional<T> {
 
-    private T data;
+  private T data;
 
-    private RedisOptional() {
+  private RedisOptional() {
 
-    }
+  }
 
-    public static <T> RedisOptional of(T data) {
-        RedisOptional redisOptional = new RedisOptional();
-        redisOptional.data = data;
-        return redisOptional;
-    }
+  public static <T> RedisOptional of(T data) {
+    RedisOptional redisOptional = new RedisOptional();
+    redisOptional.data = data;
+    return redisOptional;
+  }
 }
