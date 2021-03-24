@@ -1,18 +1,10 @@
 package pers.cc.spring.security.jwt;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.*;
-import pers.cc.spring.core.util.other.ClassUtils;
-import pers.cc.spring.security.jwt.annotation.JwtSecurityParam;
+import org.springframework.context.annotation.Import;
 import pers.cc.spring.security.jwt.config.JwtSecurityConfigurationImport;
-import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 import pers.cc.spring.security.jwt.properties.JwtProperties;
-import pers.cc.spring.security.jwt.service.impl.JwtServiceImpl;
-
-import java.util.Map;
 
 /**
  * @author chengce
