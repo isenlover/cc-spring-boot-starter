@@ -12,12 +12,12 @@ import pers.cc.spring.log.elk.model.Log;
  */
 public class ELKLogRecordFilter extends Filter<ILoggingEvent> {
 
-    @Override
-    public FilterReply decide(ILoggingEvent iLoggingEvent) {
-        Log log = CommonUtils.jsonToObject(iLoggingEvent.getMessage(), Log.class);
-        if (CommonUtils.isNotEmpty(log)) {
-            return FilterReply.ACCEPT;
-        }
-        return FilterReply.DENY;
+  @Override
+  public FilterReply decide(ILoggingEvent iLoggingEvent) {
+    Log log = CommonUtils.jsonToObject(iLoggingEvent.getMessage(), Log.class);
+    if (CommonUtils.isNotEmpty(log)) {
+      return FilterReply.ACCEPT;
     }
+    return FilterReply.DENY;
+  }
 }

@@ -20,41 +20,41 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public @interface ELKLog {
-    /**
-     * Optional
-     * <p>
-     * 操作，
-     * 如果Log位于controller上，会默认进行判断
-     * post->{@link ELKLogOperation#INSERT}
-     * put->{@link ELKLogOperation#UPDATE}
-     * delete->{@link ELKLogOperation#DELETE}
-     * get->{@link ELKLogOperation#SELECT}
-     */
-    String operation() default "'AUTO'";
+  /**
+   * Optional
+   * <p>
+   * 操作，
+   * 如果Log位于controller上，会默认进行判断
+   * post->{@link ELKLogOperation#INSERT}
+   * put->{@link ELKLogOperation#UPDATE}
+   * delete->{@link ELKLogOperation#DELETE}
+   * get->{@link ELKLogOperation#SELECT}
+   */
+  String operation() default "'AUTO'";
 
-    /**
-     * Optional
-     * <p>
-     * 进入方法前是否写入日志
-     */
-    boolean before() default false;
+  /**
+   * Optional
+   * <p>
+   * 进入方法前是否写入日志
+   */
+  boolean before() default false;
 
-    /**
-     * 是否记录任务执行时间
-     */
-    boolean taskTime() default true;
+  /**
+   * 是否记录任务执行时间
+   */
+  boolean taskTime() default true;
 
-    /**
-     * 是否把函数结果加入description
-     * 加入格式为：  结果: xxxx
-     */
-    boolean result() default false;
+  /**
+   * 是否把函数结果加入description
+   * 加入格式为：  结果: xxxx
+   */
+  boolean result() default false;
 
-    /**
-     * Required
-     * <p>
-     * 日志描述
-     * 支持SpEL条件语句
-     */
-    String description();
+  /**
+   * Required
+   * <p>
+   * 日志描述
+   * 支持SpEL条件语句
+   */
+  String description();
 }

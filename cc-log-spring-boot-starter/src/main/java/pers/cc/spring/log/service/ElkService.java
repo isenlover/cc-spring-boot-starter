@@ -6,11 +6,11 @@ package pers.cc.spring.log.service;
  */
 public interface ElkService {
 
-    void log(String description, String operation);
+  void log(String description, String operation);
 
-    void log(String description);
+  void log(String description);
 
-    void error(String description);
+  void error(String description);
 
-    void error(String description, String operation);
+  void error(String description, String operation);
 }
