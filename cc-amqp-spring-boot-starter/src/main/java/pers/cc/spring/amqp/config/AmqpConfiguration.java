@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import pers.cc.spring.amqp.properties.AmqpProperties;
 
@@ -17,8 +18,9 @@ import pers.cc.spring.amqp.properties.AmqpProperties;
  * @author chengce
  * @version 2021-02-09 14:42
  */
-@Configuration
 @ConditionalOnProperty(name = "cc.amqp.single", havingValue = "true")
+@EnableConfigurationProperties({AmqpProperties.class,})
+@ComponentScan("pers.cc.spring.amqp")
 public class AmqpConfiguration {
   @Autowired
   AmqpProperties amqpProperties;
