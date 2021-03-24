@@ -9,27 +9,20 @@ import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.audience.AudienceTarget;
-import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import pers.cc.spring.api.jpush.properties.JPushApiProperties;
 import pers.cc.spring.api.jpush.service.JPushService;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author chengce
  * @version 2021-02-09 15:00
  */
 @Slf4j
-@Service
 public class JPushServiceImpl implements JPushService {
   @Autowired
   JPushApiProperties jPushApiProperties;
