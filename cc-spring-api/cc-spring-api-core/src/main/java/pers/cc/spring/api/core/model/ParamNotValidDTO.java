@@ -10,34 +10,34 @@ import lombok.Data;
  */
 @Data
 public class ParamNotValidDTO {
-    private String field;
+  private String field;
 
+  private String message;
+
+  private ParamNotValidDTO(Builder builder) {
+    setField(builder.field);
+    setMessage(builder.message);
+  }
+
+  public static final class Builder {
+    private String field;
     private String message;
 
-    private ParamNotValidDTO(Builder builder) {
-        setField(builder.field);
-        setMessage(builder.message);
+    public Builder() {
     }
 
-    public static final class Builder {
-        private String field;
-        private String message;
-
-        public Builder() {
-        }
-
-        public Builder field(String val) {
-            field = val;
-            return this;
-        }
-
-        public Builder message(String val) {
-            message = val;
-            return this;
-        }
-
-        public ParamNotValidDTO build() {
-            return new ParamNotValidDTO(this);
-        }
+    public Builder field(String val) {
+      field = val;
+      return this;
     }
+
+    public Builder message(String val) {
+      message = val;
+      return this;
+    }
+
+    public ParamNotValidDTO build() {
+      return new ParamNotValidDTO(this);
+    }
+  }
 }

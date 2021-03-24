@@ -8,8 +8,12 @@ import org.springframework.core.type.AnnotationMetadata;
  * @version 2018-06-15 01:19
  */
 public class ApiCoreConfigurationImport implements DeferredImportSelector {
-    @Override
-    public String[] selectImports(AnnotationMetadata annotationMetadata) {
-        return new String[]{ApiCoreConfiguration.class.getName()};
-    }
+  @Override
+  public String[] selectImports(AnnotationMetadata annotationMetadata) {
+    return new String[]{
+        ApiCoreConfiguration.class.getName(),
+//        BasicErrorHandler.class.getName(),
+//        RestControllerExceptionHandler.class.getName(),
+    };
+  }
 }

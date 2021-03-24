@@ -26,7 +26,6 @@ import pers.cc.spring.log.elk.model.ELKLogBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 import static pers.cc.spring.core.message.MessageCode.BAD_REQUEST_PARAM;

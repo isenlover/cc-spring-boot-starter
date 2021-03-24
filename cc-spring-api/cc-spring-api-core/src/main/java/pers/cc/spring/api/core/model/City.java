@@ -10,21 +10,21 @@ import lombok.Data;
  */
 @Data
 public class City {
-    /**
-     * 城市名字
-     */
-    private String name;
-    /**
-     * 城市代码
-     */
-    private String code;
-    /**
-     * 父类城市代码
-     */
-    private String pid;
-    /**
-     * 子城市
-     */
-    private Cities cities = new Cities();
+  /**
+   * 城市名字
+   */
+  private String name;
+  /**
+   * 城市代码
+   */
+  private String code;
+  /**
+   * 父类城市代码
+   */
+  private String pid;
+  /**
+   * 子城市
+   */
+  private Cities cities = new Cities();
 
 }
