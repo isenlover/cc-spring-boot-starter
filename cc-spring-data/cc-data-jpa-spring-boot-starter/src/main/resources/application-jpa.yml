@@ -1,6 +1,6 @@
-spring:
-  jpa:
-    hibernate:
-      naming:
-        physical-strategy: pers.cc.spring.data.jpa.strategy.JpaTableNamingStrategy
-      ddl-auto: update
+#spring:
+#  jpa:
+#    hibernate:
+#      naming:
+#        physical-strategy: pers.cc.spring.data.jpa.strategy.JpaTableNamingStrategy
+#      ddl-auto: update
