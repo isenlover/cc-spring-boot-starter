@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
+import java.util.List;
+
 /**
  * @author chengce
  * @version 2021-03-23 14:23
@@ -30,4 +32,6 @@ public class JwtSecurityParamBean {
    * token有效期，默认30天，单位秒
    */
   private int expiryTime = 86400;
+
+  private List<String> allowOrigins;
 }

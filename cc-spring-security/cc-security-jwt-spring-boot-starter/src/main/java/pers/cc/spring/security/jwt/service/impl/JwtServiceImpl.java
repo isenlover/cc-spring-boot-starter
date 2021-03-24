@@ -2,11 +2,14 @@ package pers.cc.spring.security.jwt.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
@@ -23,9 +26,8 @@ import java.util.*;
  * @author chengce
  * @version 2017-10-08 01:24
  */
-@Primary
-@Service
-@ConditionalOnBean(JwtSecurityParamBean.class)
+@Slf4j
+@ConditionalOnBean(UserDetailsService.class)
 public class JwtServiceImpl implements JwtService {
 
   private final long serialVersionUID = -3301605591108950415L;
@@ -37,6 +39,7 @@ public class JwtServiceImpl implements JwtService {
 
   @Autowired
   JwtSecurityParamBean jwtSecurityParamBean;
+
   private final String secret = "c(*$@#(*$(Hfefweof*#)#c";
 
   /**

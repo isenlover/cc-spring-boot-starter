@@ -1,6 +1,8 @@
 package pers.cc.spring.security.jwt.annotation;
 
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import pers.cc.spring.security.jwt.config.JwtSecurityParamImport;
 
 import java.lang.annotation.*;
@@ -12,11 +14,13 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Import(JwtSecurityParamImport.class)
 public @interface JwtSecurityParam {
 
   /**
    * 参考 HttpSecurity antMatchers
+   *
    * @return
    */
   String[] value();
@@ -41,4 +45,9 @@ public @interface JwtSecurityParam {
    * Token有效期，秒，默认30天
    */
   int expiryTime() default 86400;
+
+  /**
+   * 跨域允许的源地址
+   */
+  String[] allowOrigin() default "*";
 }

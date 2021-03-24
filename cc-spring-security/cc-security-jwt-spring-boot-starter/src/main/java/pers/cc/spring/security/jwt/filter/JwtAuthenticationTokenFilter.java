@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -12,13 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pers.cc.spring.core.exception.BaseRuntimeException;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.message.MessageCode;
-import pers.cc.spring.security.jwt.model.JwtUser;
 import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
+import pers.cc.spring.security.jwt.model.JwtUser;
 import pers.cc.spring.security.jwt.service.JwtService;
 
 import javax.servlet.FilterChain;
@@ -35,8 +33,6 @@ import java.util.Arrays;
  * @version 2017-10-08 03:10
  */
 @Slf4j
-@Component
-@ConditionalOnBean(UserDetailsService.class)
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   @Autowired

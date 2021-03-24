@@ -1,15 +1,28 @@
 package pers.cc.spring.security.jwt;
 
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.*;
+import pers.cc.spring.core.util.other.ClassUtils;
+import pers.cc.spring.security.jwt.annotation.JwtSecurityParam;
 import pers.cc.spring.security.jwt.config.JwtSecurityConfigurationImport;
+import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
+import pers.cc.spring.security.jwt.properties.JwtProperties;
+import pers.cc.spring.security.jwt.service.impl.JwtServiceImpl;
+
+import java.util.Map;
 
 /**
  * @author chengce
  * @version 2018-07-12 11:56
  */
-@EnableAspectJAutoProxy(exposeProxy = true)
+@Slf4j
+@EnableConfigurationProperties({JwtProperties.class})
+//@EnableAspectJAutoProxy(exposeProxy = true)
 @Import(JwtSecurityConfigurationImport.class)
+//@ComponentScan("pers.cc.spring.security.jwt")
 public class SecurityJwtAutoConfiguration {
 
 }
