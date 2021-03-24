@@ -16,13 +16,13 @@ import java.util.SortedMap;
 // FIXME: 2018/4/30 1->2
 public class JdomXmlUtils {
 
-//    /**
+  //    /**
 //     * 将map封装成xml
 //     *
 //     * @param parameters map参数
 //     * @return xml
 //     */
-    public static String getRequestXml(SortedMap<Object, Object> parameters) {
+  public static String getRequestXml(SortedMap<Object, Object> parameters) {
 //        StringBuffer sb = new StringBuffer();
 //        sb.append("<xml>");
 //        Set<Map.Entry<Object, Object>> es = parameters.entrySet();
@@ -38,16 +38,17 @@ public class JdomXmlUtils {
 //        }
 //        sb.append("</xml>");
 //        return sb.toString();
-        return null;
-    }
-//
+    return null;
+  }
+
+  //
 //    /**
 //     * 获取子结点的xml
 //     *
 //     * @param children node
 //     * @return String
 //     */
-    private static String getChildrenText(List children) {
+  private static String getChildrenText(List children) {
 //        StringBuffer sb = new StringBuffer();
 //        if (!children.isEmpty()) {
 //            for (Object aChildren : children) {
@@ -65,10 +66,11 @@ public class JdomXmlUtils {
 //        }
 //
 //        return sb.toString();
-        return null;
-    }
-//
-    public static Map<String, Object> doXMLParse(String strxml) throws JDOMException, IOException {
+    return null;
+  }
+
+  //
+  public static Map<String, Object> doXMLParse(String strxml) throws JDOMException, IOException {
 //        strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
 //
 //        if (null == strxml || "".equals(strxml)) {
@@ -100,6 +102,6 @@ public class JdomXmlUtils {
 //        in.close();
 //
 //        return m;
-        return null;
-    }
+    return null;
+  }
 }

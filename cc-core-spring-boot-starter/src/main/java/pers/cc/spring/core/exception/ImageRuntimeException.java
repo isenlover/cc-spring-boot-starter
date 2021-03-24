@@ -10,11 +10,11 @@ import pers.cc.spring.core.message.MessageCode;
  */
 public class ImageRuntimeException extends BaseRuntimeException {
 
-    public ImageRuntimeException(MessageCode messageCode) {
-        super(messageCode);
-    }
+  public ImageRuntimeException(MessageCode messageCode) {
+    super(messageCode);
+  }
 
-    public ImageRuntimeException(String message, MessageCode messageCode) {
-        super(message, messageCode);
-    }
+  public ImageRuntimeException(String message, MessageCode messageCode) {
+    super(message, messageCode);
+  }
 }

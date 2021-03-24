@@ -10,15 +10,15 @@ import pers.cc.spring.core.message.MessageCode;
  * @version 2017-12-30 21:36
  */
 public class AccountRuntimeException extends BaseRuntimeException {
-    public AccountRuntimeException() {
-        super(MessageCode.BAD_REQUEST_USERNAME_ERROR);
-    }
+  public AccountRuntimeException() {
+    super(MessageCode.BAD_REQUEST_USERNAME_ERROR);
+  }
 
-    public AccountRuntimeException(MessageCode messageCode) {
-        super(messageCode);
-    }
+  public AccountRuntimeException(MessageCode messageCode) {
+    super(messageCode);
+  }
 
-    public AccountRuntimeException(String message, MessageCode messageCode) {
-        super(message, messageCode);
-    }
+  public AccountRuntimeException(String message, MessageCode messageCode) {
+    super(message, messageCode);
+  }
 }

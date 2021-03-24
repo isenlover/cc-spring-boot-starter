@@ -36,22 +36,22 @@ public class SSLClient {
 //        return  HttpClients.createDefault();
 //    }
 
-    public static TrustManager createTrustManager() {
-        return new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+  public static TrustManager createTrustManager() {
+    return new X509TrustManager() {
+      @Override
+      public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
 
-            }
+      }
 
-            @Override
-            public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+      @Override
+      public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
 
-            }
+      }
 
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-        };
-    }
+      @Override
+      public X509Certificate[] getAcceptedIssuers() {
+        return null;
+      }
+    };
+  }
 }

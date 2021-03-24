@@ -8,7 +8,7 @@ import org.springframework.aop.framework.AopContext;
  */
 public class AopUtils {
 
-    public static <T> T getCurrentProxy() {
-        return (T) AopContext.currentProxy();
-    }
+  public static <T> T getCurrentProxy() {
+    return (T) AopContext.currentProxy();
+  }
 }

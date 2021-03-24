@@ -17,24 +17,24 @@ import java.util.Optional;
  */
 public class Columns<T> extends ArrayList<Column> implements List<Column> {
 
-    public Column get(String title) throws ExcelRuntimeException {
-        Optional<Column> column = this.stream().filter(obj -> obj.getTitle().equals(title)).findFirst();
-        if (column.isPresent()) {
-            return column.get();
-        } else {
-            throw new ExcelRuntimeException(title + "字段缺失", MessageCode.SERVER_ERROR_EXCEL);
-        }
+  public Column get(String title) throws ExcelRuntimeException {
+    Optional<Column> column = this.stream().filter(obj -> obj.getTitle().equals(title)).findFirst();
+    if (column.isPresent()) {
+      return column.get();
+    } else {
+      throw new ExcelRuntimeException(title + "字段缺失", MessageCode.SERVER_ERROR_EXCEL);
     }
+  }
 
-    public String getValue(String title) throws ExcelRuntimeException {
-        return get(title) == null ? "" : get(title).getValue();
-    }
+  public String getValue(String title) throws ExcelRuntimeException {
+    return get(title) == null ? "" : get(title).getValue();
+  }
 
-    public String getValueTrim(String title) throws ExcelRuntimeException {
-        return getValue(title).trim();
-    }
+  public String getValueTrim(String title) throws ExcelRuntimeException {
+    return getValue(title).trim();
+  }
 
-    public boolean isEmptyValue(String title) throws ExcelRuntimeException {
-        return CommonUtils.isEmpty(getValueTrim(title));
-    }
+  public boolean isEmptyValue(String title) throws ExcelRuntimeException {
+    return CommonUtils.isEmpty(getValueTrim(title));
+  }
 }

@@ -248,10 +248,10 @@ public class ClassUtils {
   /**
    * 类转换，不处理异常
    *
-   * @param poData  po数据
+   * @param poData      po数据
    * @param targetClazz voClass
-   * @param <T>     po泛型
-   * @param <V>     vo泛型
+   * @param <T>         po泛型
+   * @param <V>         vo泛型
    * @return vo
    */
   public static <T, V> V transferClass(T poData, Class<V> targetClazz, String... excludeFields) {

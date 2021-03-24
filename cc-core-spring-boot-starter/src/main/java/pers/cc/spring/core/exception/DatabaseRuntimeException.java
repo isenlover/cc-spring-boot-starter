@@ -8,7 +8,7 @@ package pers.cc.spring.core.exception;
  */
 public class DatabaseRuntimeException extends BaseRuntimeException {
 
-    public DatabaseRuntimeException(String message) {
-        super(message);
-    }
+  public DatabaseRuntimeException(String message) {
+    super(message);
+  }
 }

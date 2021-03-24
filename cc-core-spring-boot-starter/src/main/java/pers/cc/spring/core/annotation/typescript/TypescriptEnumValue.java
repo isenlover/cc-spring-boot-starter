@@ -6,5 +6,5 @@ package pers.cc.spring.core.annotation.typescript;
  */
 @Deprecated
 public @interface TypescriptEnumValue {
-    String value();
+  String value();
 }

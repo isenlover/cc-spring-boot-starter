@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
  */
 public class CCWorkbookCallable implements Callable<String> {
 
-    public String call() throws Exception {
-        return null;
-    }
+  public String call() throws Exception {
+    return null;
+  }
 }

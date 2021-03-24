@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
  */
 public class JacksonDateFormat extends SimpleDateFormat {
 
-    public JacksonDateFormat() {
-        super("yyyy");
-    }
+  public JacksonDateFormat() {
+    super("yyyy");
+  }
 }

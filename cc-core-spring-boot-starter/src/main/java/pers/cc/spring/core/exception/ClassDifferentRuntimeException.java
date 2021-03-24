@@ -9,11 +9,11 @@ import pers.cc.spring.core.message.MessageCode;
  * @version 2017-10-16 22:46
  */
 public class ClassDifferentRuntimeException extends BaseRuntimeException {
-    public ClassDifferentRuntimeException() {
-        super(MessageCode.SERVER_ERROR_CLASS_DIFFERENT_EXCEPTION);
-    }
+  public ClassDifferentRuntimeException() {
+    super(MessageCode.SERVER_ERROR_CLASS_DIFFERENT_EXCEPTION);
+  }
 
-    public ClassDifferentRuntimeException(String message) {
-        super(message);
-    }
+  public ClassDifferentRuntimeException(String message) {
+    super(message);
+  }
 }

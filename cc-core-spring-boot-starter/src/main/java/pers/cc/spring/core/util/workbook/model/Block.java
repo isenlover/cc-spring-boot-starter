@@ -15,11 +15,11 @@ import java.util.Map;
  */
 @Data
 public class Block {
-    private String name;
+  private String name;
 
-    private Sheet sheet;
+  private Sheet sheet;
 
-    private List<String> titles;
+  private List<String> titles;
 
-    private Map<Integer, Columns<Column>> rows;
+  private Map<Integer, Columns<Column>> rows;
 }

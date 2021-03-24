@@ -9,10 +9,11 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ *
  */
 @Documented
 @Target({METHOD, PARAMETER})
 @Retention(RUNTIME)
 public @interface ApiGroup {
-    Class<?> value();
+  Class<?> value();
 }

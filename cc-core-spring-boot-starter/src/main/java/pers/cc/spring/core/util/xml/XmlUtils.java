@@ -25,71 +25,71 @@ import java.util.Map;
  */
 public class XmlUtils {
 
-    /**
-     * 扩展xstream，使其支持CDATA块
-     */
-    protected static XStream xstream = new XStream(new XppDriver() {
-        public HierarchicalStreamWriter createWriter(Writer out) {
-            return new PrettyPrintWriter(out) {
-                // 对所有xml节点的转换都增加CDATA标记
-                boolean cdata = true;
+  /**
+   * 扩展xstream，使其支持CDATA块
+   */
+  protected static XStream xstream = new XStream(new XppDriver() {
+    public HierarchicalStreamWriter createWriter(Writer out) {
+      return new PrettyPrintWriter(out) {
+        // 对所有xml节点的转换都增加CDATA标记
+        boolean cdata = true;
 
-                @SuppressWarnings("rawtypes")
-                public void startNode(String name, Class clazz) {
-                    super.startNode(name, clazz);
-                }
-
-                protected void writeText(QuickWriter writer, String text) {
-                    if (cdata) {
-                        writer.write("<![CDATA[");
-                        writer.write(text);
-                        writer.write("]]>");
-                    } else {
-                        writer.write(text);
-                    }
-                }
-            };
+        @SuppressWarnings("rawtypes")
+        public void startNode(String name, Class clazz) {
+          super.startNode(name, clazz);
         }
-    });
 
-    /**
-     * dom4j 解析xml
-     *
-     * @param inputStream 输入流
-     * @return map
-     * @throws DocumentException 异常
-     * @throws IOException       异常
-     */
-    public static Map<String, String> analyzeXmlByDom4j(InputStream inputStream) throws DocumentException, IOException {
-        // 将解析结果存储在HashMap中
-        Map<String, String> map = new HashMap<>();
-
-        // 读取输入流
-        SAXReader reader = new SAXReader();
-        Document document = reader.read(inputStream);
-        // 得到xml根元素
-        Element root = document.getRootElement();
-        // 得到根元素的所有子节点
-        @SuppressWarnings("unchecked")
-        List<Element> elementList = root.elements();
-
-        // 遍历所有子节点
-        for (Element e : elementList)
-            map.put(e.getName(), e.getText());
-
-        // 释放资源
-        inputStream.close();
-        return map;
+        protected void writeText(QuickWriter writer, String text) {
+          if (cdata) {
+            writer.write("<![CDATA[");
+            writer.write(text);
+            writer.write("]]>");
+          } else {
+            writer.write(text);
+          }
+        }
+      };
     }
+  });
 
-    /**
-     * object转成xml
-     *
-     * @param object object
-     * @return xml
-     */
-    public static String toXml(Object object) {
-        xstream.alias("xml", object.getClass());
-        return xstream.toXML(object);
-    }
+  /**
+   * dom4j 解析xml
+   *
+   * @param inputStream 输入流
+   * @return map
+   * @throws DocumentException 异常
+   * @throws IOException       异常
+   */
+  public static Map<String, String> analyzeXmlByDom4j(InputStream inputStream) throws DocumentException, IOException {
+    // 将解析结果存储在HashMap中
+    Map<String, String> map = new HashMap<>();
+
+    // 读取输入流
+    SAXReader reader = new SAXReader();
+    Document document = reader.read(inputStream);
+    // 得到xml根元素
+    Element root = document.getRootElement();
+    // 得到根元素的所有子节点
+    @SuppressWarnings("unchecked")
+    List<Element> elementList = root.elements();
+
+    // 遍历所有子节点
+    for (Element e : elementList)
+      map.put(e.getName(), e.getText());
+
+    // 释放资源
+    inputStream.close();
+    return map;
+  }
+
+  /**
+   * object转成xml
+   *
+   * @param object object
+   * @return xml
+   */
+  public static String toXml(Object object) {
+    xstream.alias("xml", object.getClass());
+    return xstream.toXML(object);
+  }
 }

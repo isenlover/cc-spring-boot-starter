@@ -15,53 +15,53 @@ import java.io.*;
  * @version 2016-09-22 15:42
  */
 public enum CCWorkbookVersion {
-    Excel2003("Excel2003"),
-    Excel2007("Excel2007");
+  Excel2003("Excel2003"),
+  Excel2007("Excel2007");
 
-    private String workBookVersion;
+  private String workBookVersion;
 
-    CCWorkbookVersion(String wbVersion) {
-        this.workBookVersion = wbVersion;
+  CCWorkbookVersion(String wbVersion) {
+    this.workBookVersion = wbVersion;
+  }
+
+  private Workbook getWorkBook(InputStream inputStream) throws IOException {
+    Workbook workbook = null;
+    if (Excel2003.equals(this)) {
+      workbook = new HSSFWorkbook(new POIFSFileSystem(inputStream));
+    } else if (Excel2007.equals(this)) {
+      workbook = new XSSFWorkbook(inputStream);
     }
+    return workbook;
+  }
 
-    private Workbook getWorkBook(InputStream inputStream) throws IOException {
-        Workbook workbook = null;
-        if (Excel2003.equals(this)) {
-            workbook = new HSSFWorkbook(new POIFSFileSystem(inputStream));
-        } else if (Excel2007.equals(this)) {
-            workbook = new XSSFWorkbook(inputStream);
-        }
-        return workbook;
+  private Workbook createWorkBook(File file) throws IOException, InvalidFormatException {
+    Workbook workbook = null;
+    if (Excel2003.equals(this)) {
+      workbook = new HSSFWorkbook(new POIFSFileSystem());
+    } else if (Excel2007.equals(this)) {
+      workbook = new XSSFWorkbook();
     }
+    if (workbook != null) {
+      FileOutputStream fileOutputStream = new FileOutputStream(file);
+      workbook.write(fileOutputStream);
+      fileOutputStream.close();
+    }
+    return workbook;
+  }
 
-    private Workbook createWorkBook(File file) throws IOException, InvalidFormatException {
-        Workbook workbook = null;
-        if (Excel2003.equals(this)) {
-            workbook = new HSSFWorkbook(new POIFSFileSystem());
-        } else if (Excel2007.equals(this)) {
-            workbook = new XSSFWorkbook();
-        }
-        if (workbook != null) {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            workbook.write(fileOutputStream);
-            fileOutputStream.close();
-        }
-        return workbook;
-    }
+  public Workbook getWorkBook(String file) throws IOException {
+    return getWorkBook(new FileInputStream(file));
+  }
 
-    public Workbook getWorkBook(String file) throws IOException {
-        return getWorkBook(new FileInputStream(file));
-    }
+  public Workbook getWorkBook(File file) throws IOException {
+    return getWorkBook(new FileInputStream(file));
+  }
 
-    public Workbook getWorkBook(File file) throws IOException {
-        return getWorkBook(new FileInputStream(file));
-    }
+  public Workbook getNewWorkBook(File file) throws IOException, InvalidFormatException {
+    return createWorkBook(file);
+  }
 
-    public Workbook getNewWorkBook(File file) throws IOException, InvalidFormatException {
-        return createWorkBook(file);
-    }
-
-    public void setWorkBookVersion(String workBookVersion) {
-        this.workBookVersion = workBookVersion;
-    }
+  public void setWorkBookVersion(String workBookVersion) {
+    this.workBookVersion = workBookVersion;
+  }
 }

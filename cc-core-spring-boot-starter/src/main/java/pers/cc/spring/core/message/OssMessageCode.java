@@ -10,28 +10,28 @@ package pers.cc.spring.core.message;
 public enum OssMessageCode {
 
 
-    ;
-    private String code;
-    private String message;
-    private Integer statusCode;
+  ;
+  private String code;
+  private String message;
+  private Integer statusCode;
 
-    OssMessageCode(String code,
-                   String message,
-                   Integer statusCode) {
-        this.code = code;
-        this.message = message;
-        this.statusCode = statusCode;
-    }
+  OssMessageCode(String code,
+                 String message,
+                 Integer statusCode) {
+    this.code = code;
+    this.message = message;
+    this.statusCode = statusCode;
+  }
 
-    public String getCode() {
-        return code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public Integer getStatusCode() {
-        return statusCode;
-    }
+  public Integer getStatusCode() {
+    return statusCode;
+  }
 }

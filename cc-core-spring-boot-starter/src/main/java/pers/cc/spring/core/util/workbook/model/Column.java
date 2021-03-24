@@ -10,11 +10,11 @@ import lombok.Data;
  */
 @Data
 public class Column {
-    private Integer index;
+  private Integer index;
 
-    private Integer rowIndex;
+  private Integer rowIndex;
 
-    private String title;
+  private String title;
 
-    private String value;
+  private String value;
 }

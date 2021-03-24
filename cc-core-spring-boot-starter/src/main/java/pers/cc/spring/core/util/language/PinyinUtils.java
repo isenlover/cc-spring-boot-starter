@@ -13,30 +13,30 @@ import pers.cc.spring.core.exception.PinyinRuntimeException;
  */
 public class PinyinUtils {
 
-    /**
-     * 中文转拼音
-     * 无分隔符和音调
-     *
-     * @param chinese 中文
-     * @return 拼音
-     */
-    public static String toPinyin(String chinese) {
-        return toPinyin(chinese, "");
-    }
+  /**
+   * 中文转拼音
+   * 无分隔符和音调
+   *
+   * @param chinese 中文
+   * @return 拼音
+   */
+  public static String toPinyin(String chinese) {
+    return toPinyin(chinese, "");
+  }
 
-    public static String toPinyin(String chinese, String separator) {
-        try {
-            return PinyinHelper.convertToPinyinString(chinese, separator, PinyinFormat.WITHOUT_TONE);
-        } catch (PinyinException e) {
-            throw new PinyinRuntimeException(e.getMessage());
-        }
+  public static String toPinyin(String chinese, String separator) {
+    try {
+      return PinyinHelper.convertToPinyinString(chinese, separator, PinyinFormat.WITHOUT_TONE);
+    } catch (PinyinException e) {
+      throw new PinyinRuntimeException(e.getMessage());
     }
+  }
 
-    public static String toShortPinyin(String chinese) {
-        try {
-            return PinyinHelper.getShortPinyin(chinese);
-        } catch (PinyinException e) {
-            throw new PinyinRuntimeException(e.getMessage());
-        }
+  public static String toShortPinyin(String chinese) {
+    try {
+      return PinyinHelper.getShortPinyin(chinese);
+    } catch (PinyinException e) {
+      throw new PinyinRuntimeException(e.getMessage());
     }
+  }
 }

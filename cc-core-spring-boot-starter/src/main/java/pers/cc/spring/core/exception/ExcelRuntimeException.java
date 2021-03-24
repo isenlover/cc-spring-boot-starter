@@ -10,12 +10,12 @@ import pers.cc.spring.core.message.MessageCode;
  */
 public class ExcelRuntimeException extends BaseRuntimeException {
 
-    public ExcelRuntimeException(String message, MessageCode messageCode) {
-        super(message, messageCode);
-    }
+  public ExcelRuntimeException(String message, MessageCode messageCode) {
+    super(message, messageCode);
+  }
 
-    public ExcelRuntimeException(MessageCode messageCode) {
-        super(messageCode);
-    }
+  public ExcelRuntimeException(MessageCode messageCode) {
+    super(messageCode);
+  }
 
 }
