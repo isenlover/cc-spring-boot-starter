@@ -92,11 +92,6 @@
       </dependency>
       <dependency>
         <groupId>pers.cc</groupId>
-        <artifactId>cc-spring-mvc</artifactId>
-        <version>${cc-spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>pers.cc</groupId>
         <artifactId>cc-spring-api-aliyun-sms</artifactId>
         <version>${cc-spring.version}</version>
       </dependency>
