@@ -52,7 +52,7 @@ public class RequestLimitAspect {
         //设置1分钟过期
         redisTemplate.expire(key, limit.time(), TimeUnit.SECONDS);
       }
-      if (count > limit.count()) {
+      if (count > limit.value()) {
         if (CommonUtils.isEmpty(limit.message())) {
           throw new RequestLimitRuntimeException(MessageCode.BAD_REQUEST_REQUEST_LIMIT);
         }
