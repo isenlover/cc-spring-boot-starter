@@ -1,7 +1,6 @@
 package pers.cc.spring.data.redis.annotation;
 
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.core.annotation.Order;
 import pers.cc.spring.core.message.MessageCode;
 
@@ -22,8 +21,7 @@ public @interface RequestLimit {
   /**
    * 允许访问的次数
    */
-  @AliasFor("values")
-  int count() default 30;
+  int value() default 30;
 
   /**
    * 时间段，多少时间段内运行访问count次
