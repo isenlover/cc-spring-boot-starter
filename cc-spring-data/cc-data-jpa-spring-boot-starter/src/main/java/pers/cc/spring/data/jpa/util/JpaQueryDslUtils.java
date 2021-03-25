@@ -30,6 +30,13 @@ public class JpaQueryDslUtils {
     return stringPath.eq(value);
   }
 
+  public static Predicate getDateTimeEqualExpression(DateTimePath dateTimePath, Date value) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return dateTimePath.eq(value);
+  }
+
   public static Predicate getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
