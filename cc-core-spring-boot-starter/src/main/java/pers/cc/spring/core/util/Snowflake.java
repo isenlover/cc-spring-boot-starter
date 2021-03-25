@@ -6,7 +6,7 @@ package pers.cc.spring.core.util;
  * @author chengce
  * @version 2021-03-25 12:07
  */
-public class SnowFlake {
+public class Snowflake {
   /**
    * 起始的时间戳
    */
@@ -42,7 +42,7 @@ public class SnowFlake {
    * @param workerId 工作ID (0~31)
    * @param machineId 数据中心ID (0~31)
    */
-  public SnowFlake(long workerId, long machineId) {
+  public Snowflake(long workerId, long machineId) {
     if (workerId > MAX_DATACENTER_NUM || workerId < 0) {
       throw new IllegalArgumentException("workerId can't be greater than MAX_DATACENTER_NUM or less than 0");
     }

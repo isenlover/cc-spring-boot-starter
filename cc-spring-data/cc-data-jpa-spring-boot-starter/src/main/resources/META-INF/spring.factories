@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-pers.cc.spring.data.jpa.config.JpaAutoConfiguration
+pers.cc.spring.data.jpa.JpaAutoConfiguration

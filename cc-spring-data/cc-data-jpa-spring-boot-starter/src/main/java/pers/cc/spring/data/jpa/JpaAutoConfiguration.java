@@ -1,8 +1,9 @@
-package pers.cc.spring.data.jpa.config;
+package pers.cc.spring.data.jpa;
 
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import pers.cc.spring.data.jpa.config.JpaImport;
 
 /**
  * @author chengce

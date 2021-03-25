@@ -2,8 +2,8 @@ package pers.cc.spring.data.jpa.model.po;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @Data
 @MappedSuperclass
+@NoArgsConstructor
 @Table(indexes = {
     @Index(columnList = "createTime"),
     @Index(columnList = "updateTime")
@@ -39,7 +40,4 @@ public class BaseIncrementPO implements Serializable {
   @Column(columnDefinition = "datetime(3) COMMENT'更新时间'")
   @ApiModelProperty(hidden = true)
   private Date updateTime;
-
-  public BaseIncrementPO() {
-  }
 }

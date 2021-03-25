@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -12,25 +13,26 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * jpa基础类
- * 主键为代码控制
+ * 主键为雪花id
  *
  * @author chengce
- * @version 2017-10-05 16:40
+ * @version 2021-03-25 12:40
  */
 @Data
 @SuperBuilder
-@MappedSuperclass
 @NoArgsConstructor
+@MappedSuperclass
 @Table(indexes = {
     @Index(columnList = "createTime"),
     @Index(columnList = "updateTime")
 })
-public class BaseCustomPO implements Serializable {
+public class BaseSnowFlakePO implements Serializable {
   @Id
-  @Column(columnDefinition = "varchar(100) COMMENT'主键'")
+  @GenericGenerator(name = "snowflakeId", strategy = "pers.cc.spring.data.jpa.strategy.GenerateSnowflakeIdStrategy")
+  @GeneratedValue(generator = "snowflakeId")
+  @Column(columnDefinition = "bigint(20) COMMENT'主键'")
   @ApiModelProperty(hidden = true)
-  private String id;
+  private long id;
 
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
@@ -43,8 +45,4 @@ public class BaseCustomPO implements Serializable {
   @Column(columnDefinition = "datetime COMMENT'更新时间'")
   @ApiModelProperty(hidden = true)
   private Date updateTime;
-
-  public BaseCustomPO(String id) {
-    this.id = id;
-  }
 }
