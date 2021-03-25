@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * com.cc.jwt.security.jwt
@@ -54,7 +55,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse,
       FilterChain filterChain) throws IOException, ServletException {
-    setResponse(httpServletResponse);
+    setResponse(httpServletResponse, httpServletRequest);
     String requestURI = httpServletRequest.getRequestURI();
     if (requestURI.equals("/csrf") || requestURI.equals("/")) {
       return;
@@ -118,8 +119,19 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
    * @deprecated 此跨域方式存在缺陷：websocket跨域不能解决
    */
   @Deprecated
-  private void setResponse(HttpServletResponse response) {
-    response.setHeader("Access-Control-Allow-Origin", "*");
+  private void setResponse(HttpServletResponse response, HttpServletRequest httpServletRequest) {
+    String origin = httpServletRequest.getHeader("Origin");
+    AtomicReference<String> allowOrigin = new AtomicReference<>("*");
+    if (origin != null) {
+      jwtSecurityParamBean.getAllowOrigins().stream().filter(origin::equals).findFirst().ifPresent(allowOrigin::set);
+    } else {
+      if (!coreProperties.isDebug()) {
+        allowOrigin.set("");
+      } else {
+        allowOrigin.set("*");
+      }
+    }
+    response.setHeader("Access-Control-Allow-Origin", allowOrigin.get());
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
     response.setHeader("Access-Control-Max-Age", "3600");
