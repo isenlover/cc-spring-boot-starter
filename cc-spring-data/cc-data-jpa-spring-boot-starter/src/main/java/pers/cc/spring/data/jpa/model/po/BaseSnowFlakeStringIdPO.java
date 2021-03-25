@@ -14,7 +14,6 @@ import java.util.Date;
 
 /**
  * 主键为雪花id
- * 会有前端精度丢失问题
  *
  * @author chengce
  * @version 2021-03-25 12:40
@@ -27,13 +26,13 @@ import java.util.Date;
     @Index(columnList = "createTime"),
     @Index(columnList = "updateTime")
 })
-public class BaseSnowFlakePO implements Serializable {
+public class BaseSnowFlakeStringIdPO implements Serializable {
   @Id
   @GenericGenerator(name = "snowflakeId", strategy = "pers.cc.spring.data.jpa.strategy.GenerateSnowflakeIdStrategy")
   @GeneratedValue(generator = "snowflakeId")
-  @Column(columnDefinition = "bigint(20) COMMENT'主键'")
+  @Column(columnDefinition = "varchar(20) COMMENT'主键'")
   @ApiModelProperty(hidden = true)
-  private long id;
+  private String id;
 
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)

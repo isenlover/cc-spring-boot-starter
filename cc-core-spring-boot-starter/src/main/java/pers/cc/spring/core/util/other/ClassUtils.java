@@ -182,7 +182,16 @@ public class ClassUtils {
       if (fieldNameList.contains(field.getName())) {
         PropertyDescriptor tbPropDesc = new PropertyDescriptor(field.getName(), poData.getClass());
         Method methodRead = tbPropDesc.getReadMethod();
-        methodWrite.invoke(vo, methodRead.invoke(poData));
+        Object invokeValue = methodRead.invoke(poData);
+        if (vo instanceof String) {
+          if (invokeValue instanceof Integer || invokeValue instanceof Long || invokeValue instanceof Double) {
+            methodWrite.invoke(vo, String.valueOf(invokeValue));
+          } else {
+            methodWrite.invoke(vo, invokeValue);
+          }
+        } else {
+          methodWrite.invoke(vo, invokeValue);
+        }
       }
     }
   }
