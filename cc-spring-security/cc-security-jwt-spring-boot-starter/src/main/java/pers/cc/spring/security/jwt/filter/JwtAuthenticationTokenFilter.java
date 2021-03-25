@@ -2,6 +2,7 @@ package pers.cc.spring.security.jwt.filter;
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import pers.cc.spring.core.exception.BaseRuntimeException;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.message.MessageCode;
+import pers.cc.spring.core.properties.CoreProperties;
 import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 import pers.cc.spring.security.jwt.model.JwtUser;
 import pers.cc.spring.security.jwt.service.JwtService;
@@ -43,6 +45,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   @Autowired
   private JwtSecurityParamBean jwtSecurityParamBean;
+
+  @Autowired
+  CoreProperties coreProperties;
 
   @Override
   protected void doFilterInternal(
@@ -83,19 +88,25 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   private void processException(Exception exception, HttpServletResponse httpServletResponse) throws IOException {
     httpServletResponse.setContentType("application/json,charset=UTF-8");
     httpServletResponse.setCharacterEncoding("UTF-8");
+    Message.Builder<Object> failedBuilder = Message.failed();
     if (exception instanceof BaseRuntimeException) {
       BaseRuntimeException baseRuntimeException = (BaseRuntimeException) exception;
       httpServletResponse.setStatus(baseRuntimeException.getStatusCode());
       httpServletResponse.getWriter().write(
-          JSON.toJSONString(Message.failed().message(baseRuntimeException.getMessage()).code(baseRuntimeException.getErrCode()).build()));
-    } else if (exception instanceof AuthenticationException) {
+          JSON.toJSONString(failedBuilder.message(baseRuntimeException.getMessage()).code(baseRuntimeException.getErrCode()).build()));
+    } else if (exception instanceof AuthenticationException || exception instanceof SignatureException) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-      httpServletResponse.getWriter().write(JSON.toJSONString(Message.failed().messageCode(MessageCode.UNAUTHORIZED).build()));
+      httpServletResponse.getWriter().write(JSON.toJSONString(failedBuilder.messageCode(MessageCode.UNAUTHORIZED).build()));
     } else if (exception instanceof ExpiredJwtException) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-      httpServletResponse.getWriter().write(JSON.toJSONString(Message.failed().messageCode(MessageCode.UNAUTHORIZED_EXPIRED).build()));
+      httpServletResponse.getWriter().write(JSON.toJSONString(failedBuilder.messageCode(MessageCode.UNAUTHORIZED_EXPIRED).build()));
     } else {
-      httpServletResponse.getWriter().write(JSON.toJSONString(Message.failed().messageCode(MessageCode.SERVER_ERROR).build()));
+      if (coreProperties.isDebug()) {
+        failedBuilder.message("测试环境：" + exception.getLocalizedMessage());
+      } else {
+        failedBuilder.messageCode(MessageCode.SERVER_ERROR);
+      }
+      httpServletResponse.getWriter().write(JSON.toJSONString(failedBuilder.build()));
     }
     // TODO: 2021/3/8 可以写elk日志
   }
@@ -104,8 +115,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
    * 跨域官方推荐
    * 设置了这个才能在filter里throw到前端报错
    *
-   * @param response
-   * @see pers.cc.spring.security.jwt.config.CorsConfig
    * @deprecated 此跨域方式存在缺陷：websocket跨域不能解决
    */
   @Deprecated
