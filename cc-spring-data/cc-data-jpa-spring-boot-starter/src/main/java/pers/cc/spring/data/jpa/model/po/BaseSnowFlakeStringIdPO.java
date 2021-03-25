@@ -28,7 +28,7 @@ import java.util.Date;
 })
 public class BaseSnowFlakeStringIdPO implements Serializable {
   @Id
-  @GenericGenerator(name = "snowflakeId", strategy = "pers.cc.spring.data.jpa.strategy.GenerateSnowflakeIdStrategy")
+  @GenericGenerator(name = "snowflakeId", strategy = "pers.cc.spring.data.jpa.strategy.GenerateSnowflakeStringIdStrategy")
   @GeneratedValue(generator = "snowflakeId")
   @Column(columnDefinition = "varchar(20) COMMENT'主键'")
   @ApiModelProperty(hidden = true)
