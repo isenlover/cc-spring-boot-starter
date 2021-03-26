@@ -71,7 +71,7 @@ public class JpaQueryDslUtils {
         return new OrderSpecifier<>(Order.DESC, expression);
       }
     }
-    return new OrderSpecifier<>(Order.ASC, expression);
+    return null;
   }
 
 }
