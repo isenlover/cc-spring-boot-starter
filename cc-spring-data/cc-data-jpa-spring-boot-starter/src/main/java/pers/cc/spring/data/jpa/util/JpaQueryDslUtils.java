@@ -3,7 +3,6 @@ package pers.cc.spring.data.jpa.util;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.*;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.database.DatabaseUtils;
@@ -29,6 +28,13 @@ public class JpaQueryDslUtils {
       return null;
     }
     return stringPath.eq(value);
+  }
+
+  public static BooleanExpression getStringEqualOrExpression(StringPath stringPath1, StringPath stringPath2, String value) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return stringPath1.eq(value).or(stringPath2.eq(value));
   }
 
   public static BooleanExpression getDateTimeEqualExpression(DateTimePath dateTimePath, Date value) {
