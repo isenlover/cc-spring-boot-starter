@@ -4,10 +4,7 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanPath;
-import com.querydsl.core.types.dsl.DateTimePath;
-import com.querydsl.core.types.dsl.EnumPath;
-import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.core.types.dsl.*;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.database.DatabaseUtils;
 
@@ -20,28 +17,28 @@ import java.util.Date;
  */
 public class JpaQueryDslUtils {
 
-  public static Predicate getEnumExpression(EnumPath enumPath, Object value) {
+  public static BooleanExpression getEnumExpression(EnumPath enumPath, Object value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
     }
     return enumPath.eq(value);
   }
 
-  public static Predicate getStringEqualExpression(StringPath stringPath, String value) {
+  public static BooleanExpression getStringEqualExpression(StringPath stringPath, String value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
     }
     return stringPath.eq(value);
   }
 
-  public static Predicate getDateTimeEqualExpression(DateTimePath dateTimePath, Date value) {
+  public static BooleanExpression getDateTimeEqualExpression(DateTimePath dateTimePath, Date value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
     }
     return dateTimePath.eq(value);
   }
 
-  public static Predicate getDateTimeBetweenExpression(DateTimePath dateTimePath, String dateTime) {
+  public static BooleanExpression getDateTimeBetweenExpression(DateTimePath dateTimePath, String dateTime) {
     if (CommonUtils.isEmpty(dateTime)) {
       return null;
     }
@@ -49,14 +46,14 @@ public class JpaQueryDslUtils {
     return dateTimePath.between(new Date(split[0]), new Date(split[1]));
   }
 
-  public static Predicate getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
+  public static BooleanExpression getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
     }
     return booleanPath.eq(value);
   }
 
-  public static Predicate getStringLikeExpression(StringPath stringPath, String value) {
+  public static BooleanExpression getStringLikeExpression(StringPath stringPath, String value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
     }
