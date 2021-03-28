@@ -71,8 +71,7 @@ public class JPushServiceImpl implements JPushService {
 //        PushPayload payload = buildPushObject_all_alias_alert();
     try {
       PushResult result = jpushClient.sendPush(payload);
-      log.info("Got result - " + result);
-      System.out.println(result);
+      log.info("JPush result - " + result);
       // 如果使用 NettyHttpClient，需要手动调用 close 方法退出进程
       // If uses NettyHttpClient, call close when finished sending request, otherwise process will not exit.
       // jpushClient.close();
