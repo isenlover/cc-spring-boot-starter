@@ -4,8 +4,10 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.*;
+import com.querydsl.jpa.impl.JPAQuery;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.database.DatabaseUtils;
+import pers.cc.spring.data.jpa.page.PageRequest;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -83,6 +85,14 @@ public class JpaQueryDslUtils {
       }
     }
     return null;
+  }
+
+  public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest) {
+    return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize());
+  }
+
+  public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier orderSpecifier) {
+    return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize()).orderBy(orderSpecifier);
   }
 
 }
