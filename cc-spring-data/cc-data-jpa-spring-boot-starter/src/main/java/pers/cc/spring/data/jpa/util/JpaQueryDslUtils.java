@@ -9,6 +9,7 @@ import pers.cc.spring.core.util.database.DatabaseUtils;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * @author chengce
@@ -64,6 +65,13 @@ public class JpaQueryDslUtils {
       return null;
     }
     return stringPath.like(DatabaseUtils.likeAll(value));
+  }
+
+  public static BooleanExpression getStringInExpression(StringPath stringPath, String[] value) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return stringPath.in(Arrays.stream(value).collect(Collectors.toList()));
   }
 
   public static OrderSpecifier getOrderSpecifier(String value, Expression expression) {

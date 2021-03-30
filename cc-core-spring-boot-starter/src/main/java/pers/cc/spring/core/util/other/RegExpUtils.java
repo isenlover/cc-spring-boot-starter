@@ -246,7 +246,7 @@ public class RegExpUtils {
   public static boolean matchChinese(String str,
                                      int minLength,
                                      int maxLength) {
-    String regExp = "^[\\u0391-\\uFFE5]{" + minLength + "," + maxLength + "}$";
+    String regExp = "^[\\u4e00-\\u9fa5]{" + minLength + "," + maxLength + "}$";
     return RegExpUtils.builder(regExp).match(str);
   }
 
@@ -257,8 +257,19 @@ public class RegExpUtils {
    * @return 匹配结果
    */
   public static boolean matchChinese(String str) {
-    String regExp = "[\\u0391-\\uFFE5]";
+    String regExp = "[\\u4e00-\\u9fa5]";
     return RegExpUtils.builder(regExp).match(str);
+  }
+
+  /**
+   * 是否包含中文
+   *
+   * @param str 中文
+   * @return 匹配结果
+   */
+  public static boolean existChinese(String str) {
+    String regExp = "[\\u4e00-\\u9fa5]";
+    return RegExpUtils.builder(regExp).find(str).find();
   }
 
   /**
