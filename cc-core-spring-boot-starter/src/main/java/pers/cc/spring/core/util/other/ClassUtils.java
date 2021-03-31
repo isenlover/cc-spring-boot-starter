@@ -297,8 +297,7 @@ public class ClassUtils {
   }
 
   public static <T> T getValue(Object clazz, String fieldName) {
-    Field[] poFields = clazz.getClass().getDeclaredFields();
-    for (Field field : poFields) {
+    for (Field field : getClassAllFields(clazz.getClass())) {
       if (fieldName.equals(field.getName())) {
         field.setAccessible(true);
         try {
