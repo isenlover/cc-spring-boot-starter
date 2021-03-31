@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class EnumClassUtils {
+
+  public static <T> List<EnumClassVO> generator(List<T> originList, String labelKey) {
+    return generator(originList, labelKey, "id", null);
+  }
+
   public static <T> List<EnumClassVO> generator(List<T> originList, String labelKey, String valueKey) {
     return generator(originList, labelKey, valueKey, null);
   }
