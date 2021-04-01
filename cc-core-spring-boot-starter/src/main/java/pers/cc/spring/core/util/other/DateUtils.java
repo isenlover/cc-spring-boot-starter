@@ -4,6 +4,8 @@ import pers.cc.spring.core.exception.BaseRuntimeException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -421,5 +423,13 @@ public class DateUtils {
       return randomDate(begin, end);
     }
     return rtn;
+  }
+
+  public static LocalDateTime toLocalDateTime(Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  }
+
+  public static Date toDate(LocalDateTime localDateTime) {
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
   }
 }
