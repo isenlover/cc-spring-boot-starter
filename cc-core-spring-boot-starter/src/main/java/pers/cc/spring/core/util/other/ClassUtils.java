@@ -235,26 +235,20 @@ public class ClassUtils {
     return vo;
   }
 
-  public static List<String> getClassAllFieldName(Class clazz, String... excludeFields) {
-    List<String> fieldNameList = new ArrayList<>();
-    for (Field field : getClassAllFields(clazz)) {
-      if (Arrays.stream(excludeFields).noneMatch(s1 -> s1.equals(field.getName()))) {
-        fieldNameList.add(field.getName());
-      }
-    }
-    return fieldNameList;
+  public static List<String> getClassAllFieldName(Class<?> clazz, String... excludeFields) {
+    return getClassAllFields(clazz, excludeFields).stream().map(Field::getName).collect(Collectors.toList());
   }
 
-  public static List<Field> getClassAllFields(Class clazz, String... excludeFields) {
+  public static List<Field> getClassAllFields(Class<?> clazz, String... excludeFields) {
     List<Field> fieldList = new ArrayList<>();
     if (clazz.getSuperclass() != null) {
-      if (Arrays.stream(excludeFields).noneMatch(s1 -> s1.equals(clazz.getName()))) {
-        fieldList.addAll(getClassAllFields(clazz.getSuperclass()));
-      }
+      fieldList.addAll(getClassAllFields(clazz.getSuperclass()));
     }
     Field[] fields = clazz.getDeclaredFields();
-    fieldList.addAll(Arrays.stream(fields).filter(field -> Arrays.stream(excludeFields).noneMatch(s -> s.equals(field.getName()))).collect(
-        Collectors.toList()));
+    fieldList.addAll(Arrays.asList(fields));
+    fieldList = fieldList.stream()
+        .filter(field -> Arrays.stream(excludeFields).noneMatch(s -> s.equals(field.getName())))
+        .collect(Collectors.toList());
     return fieldList;
   }
 
@@ -271,7 +265,7 @@ public class ClassUtils {
     try {
       return getClass(poData, targetClazz, excludeFields);
     } catch (IntrospectionException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      log.error("转换class异常： classPo: " + poData.getClass() + "voClass:  " + targetClazz.getClass() + e.getLocalizedMessage());
+      log.error("转换class异常： classPo: " + poData.getClass() + "voClass:  " + targetClazz + e.getLocalizedMessage());
       throw new BaseRuntimeException(MessageCode.SERVER_ERROR);
     }
   }
@@ -279,16 +273,10 @@ public class ClassUtils {
   public static <T, V> void mergeClass(T fromData, V targetData, String... excludeFields) {
     try {
       //获取vo的全部属性值
-      List<Field> fields = getClassAllFields(targetData.getClass()).stream()
-          .filter(s -> excludeFields == null || excludeFields.length == 0 || Arrays.stream(excludeFields).noneMatch(
-              s1 -> s1.equals(s.getName())))
-          .collect(Collectors.toList());//获取所有域名
-      //并创建一个vo对象
+      List<Field> fields = getClassAllFields(targetData.getClass(), excludeFields);
 
       //获取po的全部属性名
-      List<String> fieldNameList = getClassAllFieldName(fromData.getClass()).stream()
-          .filter(s -> excludeFields == null || excludeFields.length == 0 || Arrays.stream(excludeFields).noneMatch(s1 -> s1.equals(s)))
-          .collect(Collectors.toList());
+      List<String> fieldNameList = getClassAllFieldName(fromData.getClass(), excludeFields);
       setFields(fields, fieldNameList, fromData, targetData);
     } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
       log.error(e.getLocalizedMessage());
@@ -311,7 +299,7 @@ public class ClassUtils {
   }
 
   /**
-   * 查找重复对象元素并返回
+   * 在对象列表中查找重复Field
    *
    * @param list      列表
    * @param fieldName 查询对象中字段名
@@ -320,11 +308,10 @@ public class ClassUtils {
    */
   public static <T> List<Object> getDuplicateElements(List<T> list, String fieldName) {
     return list.stream()                              // list 对应的 Stream
-        .collect(Collectors.toMap(e -> getValue(e, fieldName), e -> 1,
-            Integer::sum)) // 获得元素出现频率的 Map，键为元素，值为元素出现的次数
+        .collect(Collectors.toMap(e -> getValue(e, fieldName), e -> 1, Integer::sum)) // 获得元素出现频率的 Map，键为元素，值为元素出现的次数
         .entrySet().stream()                   // 所有 entry 对应的 Stream
         .filter(entry -> entry.getValue() > 1) // 过滤出元素出现次数大于 1 的 entry
-        .map(entry -> entry.getKey())          // 获得 entry 的键（重复元素）对应的 Stream
+        .map(Map.Entry::getKey)          // 获得 entry 的键（重复元素）对应的 Stream
         .collect(Collectors.toList());         // 转化为 List
   }
 
@@ -337,11 +324,44 @@ public class ClassUtils {
    */
   public static <T> List<T> getDuplicateElements(List<T> list) {
     return list.stream()
-        .collect(Collectors.toMap(e -> e, e -> 1,
-            Integer::sum))
+        .collect(Collectors.toMap(e -> e, e -> 1, Integer::sum))
         .entrySet().stream()
         .filter(entry -> entry.getValue() > 1)
-        .map(entry -> entry.getKey())
+        .map(Map.Entry::getKey)
         .collect(Collectors.toList());
+  }
+
+  /**
+   * 取出两个bean相同字段值不相等的字段
+   *
+   * @param sourceClass 原class
+   * @param newClass    新class
+   * @param <T>         泛型
+   * @return CompareClass
+   */
+  public static <T> List<CompareClass> findDifferentField(T sourceClass, T newClass, String... excludeFields) {
+    List<Field> sourceFieldList = getClassAllFields(sourceClass.getClass(), excludeFields);
+    List<Field> newFieldList = getClassAllFields(newClass.getClass(), excludeFields);
+    ArrayList<CompareClass> results = new ArrayList<>();
+    for (Field sourceField : sourceFieldList) {
+      newFieldList.stream().filter(field -> field.getName().equals(sourceField.getName())).findFirst().ifPresent(newField -> {
+        try {
+          sourceField.setAccessible(true);
+          newField.setAccessible(true);
+          Object sourceValue = sourceField.get(sourceClass);
+          Object newValue = newField.get(newClass);
+          if (sourceValue != null && !sourceValue.equals(newValue)) {
+            results.add(CompareClass.builder()
+                .fieldName(sourceField.getName()).sourceValue(sourceValue).newValue(newValue).fieldType(sourceField.getType())
+                .build());
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+          log.error("findDifferentField，" + e.getLocalizedMessage());
+          throw new BaseRuntimeException(MessageCode.SERVER_ERROR);
+        }
+      });
+    }
+    return results;
   }
 }
