@@ -1,7 +1,6 @@
 package pers.cc.spring.core.util.other;
 
 import lombok.Data;
-import lombok.Value;
 import net.logstash.logback.encoder.org.apache.commons.lang.ArrayUtils;
 import pers.cc.spring.core.exception.BaseRuntimeException;
 import pers.cc.spring.core.message.Message;
@@ -10,7 +9,6 @@ import pers.cc.spring.core.util.CommonUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -85,7 +83,15 @@ public class MathUtils {
   }
 
   public static double getDouble(int x, int y, int place) {
-    return getDouble((double) x / y, place);
+    return getDouble((double) x / (y * 1.0), place);
+  }
+
+  public static double getDouble(double x, double y, int place) {
+    return getDouble(x / (y * 1.0), place);
+  }
+
+  public static double getDouble(double x, int y, int place) {
+    return getDouble(x / (y * 1.0), place);
   }
 
   public static double getPercent(int element, int denominator, int place) {
