@@ -11,6 +11,8 @@ import pers.cc.spring.data.jpa.page.PageRequest;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +64,13 @@ public class JpaQueryDslUtils {
     return booleanPath.eq(value);
   }
 
+  public static BooleanExpression getExistExpression(BooleanExpression booleanExpression, Boolean value) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return booleanExpression;
+  }
+
   public static BooleanExpression getStringLikeExpression(StringPath stringPath, String value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
@@ -87,12 +96,23 @@ public class JpaQueryDslUtils {
     return null;
   }
 
+  public static OrderSpecifier getOrderSpecifier(String value, OrderSpecifier orderSpecifier) {
+    if (CommonUtils.isNotEmpty(value)) {
+      return orderSpecifier;
+    }
+    return null;
+  }
+
   public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest) {
     return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize());
   }
 
   public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier orderSpecifier) {
     return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize()).orderBy(orderSpecifier);
+  }
+
+  public static OrderSpecifier[] getOrderList(List<OrderSpecifier> orderSpecifierList) {
+    return orderSpecifierList.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
   }
 
 }
