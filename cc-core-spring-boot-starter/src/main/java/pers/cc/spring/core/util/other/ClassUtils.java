@@ -378,39 +378,52 @@ public class ClassUtils {
     return convertEnumToText(list, "Text", "getDescription");
   }
 
+  /**
+   * 可以把枚举里面的赋值到字符串上
+   *
+   * @param list                列表
+   * @param enumTextLabelSuffix 枚举字符串后缀
+   * @param enumTextMethod      枚举赋值字符串的方法
+   * @param <T>                 泛型
+   * @return 列表
+   */
   public static <T> List<T> convertEnumToText(List<T> list, String enumTextLabelSuffix, String enumTextMethod) {
     return list.stream().peek(t -> {
-      List<Field> classAllFields = getClassAllFields(t.getClass()).stream().filter(field -> field.getName().endsWith(enumTextLabelSuffix))
+      List<Field> classAllFields = getClassAllFields(t.getClass()).stream()
+          .filter(field -> field.getName().endsWith(enumTextLabelSuffix))
           .collect(Collectors.toList());
       for (Field field : classAllFields) {
         field.setAccessible(true);
         Field enumSourceField = getField(t, field.getName().replace(enumTextLabelSuffix, ""));
-        assert enumSourceField != null;
-        enumSourceField.setAccessible(true);
-        try {
-          Class<?> class_ = Class.forName(enumSourceField.getType().toString().replace("class ", ""));
-          if (class_.isEnum()) {
-            Arrays.stream(class_.getEnumConstants()).filter(o -> {
-              try {
-                Object obj = enumSourceField.get(t);
-                return o.equals(obj);
-              } catch (IllegalAccessException e) {
-                e.printStackTrace();
-              }
-              return false;
-            }).findFirst().ifPresent(o -> {
-              try {
-                String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
-                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
-                Method writeMethod = propertyDescriptor.getWriteMethod();
-                writeMethod.invoke(t, invokeValue);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            });
+        if (enumSourceField != null) {
+          enumSourceField.setAccessible(true);
+          try {
+            Class<?> class_ = Class.forName(enumSourceField.getType().toString().replace("class ", ""));
+            if (class_.isEnum()) {
+              Arrays.stream(class_.getEnumConstants()).filter(o -> {
+                try {
+                  Object obj = enumSourceField.get(t);
+                  return o.equals(obj);
+                } catch (IllegalAccessException e) {
+                  e.printStackTrace();
+                }
+                return false;
+              }).findFirst().ifPresent(o -> {
+                try {
+                  String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
+                  PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
+                  Method writeMethod = propertyDescriptor.getWriteMethod();
+                  writeMethod.invoke(t, invokeValue);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              });
+            }
+          } catch (Exception e) {
+            e.printStackTrace();
           }
-        } catch (Exception e) {
-          e.printStackTrace();
+        } else {
+          log.warn("后缀为" + field.getName() + "的Field没有找到对应枚举Field，转化失败");
         }
       }
     })
