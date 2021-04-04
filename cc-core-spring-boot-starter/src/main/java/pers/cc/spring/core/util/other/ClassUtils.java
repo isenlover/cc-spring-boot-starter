@@ -298,6 +298,15 @@ public class ClassUtils {
     return null;
   }
 
+  public static Field getField(Object clazz, String fieldName) {
+    for (Field field : getClassAllFields(clazz.getClass())) {
+      if (fieldName.equals(field.getName())) {
+        return field;
+      }
+    }
+    return null;
+  }
+
   /**
    * 在对象列表中查找重复Field
    *
@@ -363,5 +372,34 @@ public class ClassUtils {
       });
     }
     return results;
+  }
+
+  public static <T> List<T> convertEnumToText(List<T> list, String enumTextLabelSuffix, String enumTextMethod) {
+    return list.stream().peek(t -> {
+      List<Field> classAllFields = getClassAllFields(t.getClass()).stream().filter(field -> field.getName().equals(enumTextLabelSuffix))
+          .collect(Collectors.toList());
+      for (Field field : classAllFields) {
+        field.setAccessible(true);
+        Field enumSourceField = getField(t.getClass(), field.getName().replace(enumTextLabelSuffix, ""));
+
+//        PropertyDescriptor voPropDesc;
+        try {
+          assert enumSourceField != null;
+          Method method = enumSourceField.getClass().getMethod(enumTextMethod);
+          String invoke = (String) method.invoke(enumSourceField);
+          log.info(invoke);
+//          assert enumSourceField != null;
+//          voPropDesc = new PropertyDescriptor(field.getName(), t.getClass());
+//          Method methodWrite = voPropDesc.getWriteMethod();
+//          PropertyDescriptor tbPropDesc = new PropertyDescriptor(enumSourceField.getName(), t.getClass());
+//          Method methodRead = tbPropDesc.getReadMethod();
+//          Object invokeValue = methodRead.invoke(poData);
+//          methodWrite.invoke(t, )
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+          e.printStackTrace();
+        }
+      }
+    })
+        .collect(Collectors.toList());
   }
 }
