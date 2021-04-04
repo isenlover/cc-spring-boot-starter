@@ -374,28 +374,42 @@ public class ClassUtils {
     return results;
   }
 
+  public static <T> List<T> convertEnumToText(List<T> list) {
+    return convertEnumToText(list, "Text", "getDescription");
+  }
+
   public static <T> List<T> convertEnumToText(List<T> list, String enumTextLabelSuffix, String enumTextMethod) {
     return list.stream().peek(t -> {
-      List<Field> classAllFields = getClassAllFields(t.getClass()).stream().filter(field -> field.getName().equals(enumTextLabelSuffix))
+      List<Field> classAllFields = getClassAllFields(t.getClass()).stream().filter(field -> field.getName().endsWith(enumTextLabelSuffix))
           .collect(Collectors.toList());
       for (Field field : classAllFields) {
         field.setAccessible(true);
-        Field enumSourceField = getField(t.getClass(), field.getName().replace(enumTextLabelSuffix, ""));
-
-//        PropertyDescriptor voPropDesc;
+        Field enumSourceField = getField(t, field.getName().replace(enumTextLabelSuffix, ""));
+        assert enumSourceField != null;
+        enumSourceField.setAccessible(true);
         try {
-          assert enumSourceField != null;
-          Method method = enumSourceField.getClass().getMethod(enumTextMethod);
-          String invoke = (String) method.invoke(enumSourceField);
-          log.info(invoke);
-//          assert enumSourceField != null;
-//          voPropDesc = new PropertyDescriptor(field.getName(), t.getClass());
-//          Method methodWrite = voPropDesc.getWriteMethod();
-//          PropertyDescriptor tbPropDesc = new PropertyDescriptor(enumSourceField.getName(), t.getClass());
-//          Method methodRead = tbPropDesc.getReadMethod();
-//          Object invokeValue = methodRead.invoke(poData);
-//          methodWrite.invoke(t, )
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+          Class<?> class_ = Class.forName(enumSourceField.getType().toString().replace("class ", ""));
+          if (class_.isEnum()) {
+            Arrays.stream(class_.getEnumConstants()).filter(o -> {
+              try {
+                Object obj = enumSourceField.get(t);
+                return o.equals(obj);
+              } catch (IllegalAccessException e) {
+                e.printStackTrace();
+              }
+              return false;
+            }).findFirst().ifPresent(o -> {
+              try {
+                String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
+                Method writeMethod = propertyDescriptor.getWriteMethod();
+                writeMethod.invoke(t, invokeValue);
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            });
+          }
+        } catch (Exception e) {
           e.printStackTrace();
         }
       }
