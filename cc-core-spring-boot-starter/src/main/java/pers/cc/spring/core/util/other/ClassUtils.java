@@ -400,7 +400,7 @@ public class ClassUtils {
           try {
             Class<?> class_ = Class.forName(enumSourceField.getType().toString().replace("class ", ""));
             if (class_.isEnum()) {
-              Arrays.stream(class_.getEnumConstants()).filter(o -> {
+              Optional<?> first = Arrays.stream(class_.getEnumConstants()).filter(o -> {
                 try {
                   Object obj = enumSourceField.get(t);
                   return o.equals(obj);
@@ -408,16 +408,21 @@ public class ClassUtils {
                   e.printStackTrace();
                 }
                 return false;
-              }).findFirst().ifPresent(o -> {
-                try {
-                  String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
-                  PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
-                  Method writeMethod = propertyDescriptor.getWriteMethod();
-                  writeMethod.invoke(t, invokeValue == null ? defaultValue : invokeValue);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              });
+              }).findFirst();
+              PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
+              Method writeMethod = propertyDescriptor.getWriteMethod();
+              if (first.isPresent()) {
+                first.ifPresent(o -> {
+                  try {
+                    String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
+                    writeMethod.invoke(t, invokeValue);
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
+                });
+              } else {
+                writeMethod.invoke(t, defaultValue);
+              }
             }
           } catch (Exception e) {
             e.printStackTrace();
