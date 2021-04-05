@@ -35,6 +35,13 @@ public class JpaQueryDslUtils {
     return stringPath.eq(value);
   }
 
+  public static BooleanExpression getNumberEqualExpression(NumberPath numberPath, Object value) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return numberPath.eq(value);
+  }
+
   public static BooleanExpression getStringEqualOrExpression(StringPath stringPath1, StringPath stringPath2, String value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
