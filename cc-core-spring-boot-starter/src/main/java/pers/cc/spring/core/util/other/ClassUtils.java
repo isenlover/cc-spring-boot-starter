@@ -375,7 +375,7 @@ public class ClassUtils {
   }
 
   public static <T> List<T> convertEnumToText(List<T> list) {
-    return convertEnumToText(list, "Text", "getDescription");
+    return convertEnumToText(list, "Text", "getDescription", "-");
   }
 
   /**
@@ -387,7 +387,7 @@ public class ClassUtils {
    * @param <T>                 泛型
    * @return 列表
    */
-  public static <T> List<T> convertEnumToText(List<T> list, String enumTextLabelSuffix, String enumTextMethod) {
+  public static <T> List<T> convertEnumToText(List<T> list, String enumTextLabelSuffix, String enumTextMethod, String defaultValue) {
     return list.stream().peek(t -> {
       List<Field> classAllFields = getClassAllFields(t.getClass()).stream()
           .filter(field -> field.getName().endsWith(enumTextLabelSuffix))
@@ -413,7 +413,7 @@ public class ClassUtils {
                   String invokeValue = (String) o.getClass().getMethod(enumTextMethod).invoke(o);
                   PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(), t.getClass());
                   Method writeMethod = propertyDescriptor.getWriteMethod();
-                  writeMethod.invoke(t, invokeValue);
+                  writeMethod.invoke(t, invokeValue == null ? defaultValue : invokeValue);
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
