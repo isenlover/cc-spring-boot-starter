@@ -1,6 +1,7 @@
 package pers.cc.spring.core.page;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pers.cc.spring.core.annotation.typescript.Typescript;
 import pers.cc.spring.core.annotation.typescript.TypescriptGenerics;
 import pers.cc.spring.core.util.CommonUtils;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @Typescript
 @TypescriptGenerics
+@NoArgsConstructor
 public class PageResults<T> {
   private long page;
 

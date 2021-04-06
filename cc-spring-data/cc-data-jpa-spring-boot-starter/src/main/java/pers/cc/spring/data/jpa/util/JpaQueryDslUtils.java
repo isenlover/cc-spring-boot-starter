@@ -65,7 +65,7 @@ public class JpaQueryDslUtils {
   }
 
   public static BooleanExpression getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
-    if (CommonUtils.isEmpty(value)) {
+    if (CommonUtils.isEmpty(value) || Boolean.FALSE.equals(value)) {
       return null;
     }
     return booleanPath.eq(value);
