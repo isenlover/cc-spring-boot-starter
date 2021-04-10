@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static pers.cc.spring.core.util.CommonUtils.isNotEmpty;
 
 /**
@@ -245,7 +246,7 @@ public class ClassUtils {
       fieldList.addAll(getClassAllFields(clazz.getSuperclass()));
     }
     Field[] fields = clazz.getDeclaredFields();
-    fieldList.addAll(Arrays.asList(fields));
+    fieldList.addAll(asList(fields));
     fieldList = fieldList.stream()
         .filter(field -> Arrays.stream(excludeFields).noneMatch(s -> s.equals(field.getName())))
         .collect(Collectors.toList());
@@ -376,6 +377,10 @@ public class ClassUtils {
 
   public static <T> List<T> convertEnumToText(List<T> list) {
     return convertEnumToText(list, "Text", "getDescription", "-");
+  }
+
+  public static <T> T convertEnumToText(T object) {
+    return convertEnumToText(asList(object), "Text", "getDescription", "-").get(0);
   }
 
   /**

@@ -45,8 +45,11 @@ public class JpaPageUtils {
         queryResults.getResults());
   }
 
-
   public static <T> PageResults<T> convertToPageData(QueryResults<T> queryResults, List<T> otherList) {
+    return PageResults.of(queryResults.getOffset(), queryResults.getLimit(), queryResults.getTotal(), otherList);
+  }
+
+  public static <T> PageResults<T> convertToPageDataNotSource(QueryResults queryResults, List<T> otherList) {
     return PageResults.of(queryResults.getOffset(), queryResults.getLimit(), queryResults.getTotal(), otherList);
   }
 
@@ -54,6 +57,4 @@ public class JpaPageUtils {
     return PageResults.of(page.getPageable().getPageNumber(), page.getPageable().getPageSize(), page.getTotalElements(),
         page.getContent());
   }
-
-
 }

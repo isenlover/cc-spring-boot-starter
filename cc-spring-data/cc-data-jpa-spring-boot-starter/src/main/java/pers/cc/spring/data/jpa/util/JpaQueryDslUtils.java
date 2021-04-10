@@ -122,4 +122,55 @@ public class JpaQueryDslUtils {
     return orderSpecifierList.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
   }
 
+  /**
+   * "DATE_FORMAT({0},'%Y-%m-%d')"
+   * %Y：年，4 位
+   * %y：年，2 位
+   * %M：月名
+   * %m：月，数值（00-12）
+   * %D：带有英文前缀的月中的天
+   * %d：月的天，数值（00-31）
+   * %e：月的天，数值（0-31）
+   * <p>
+   * %H：小时（00-23）
+   * %h：小时（01-12）
+   * %I：小时（01-12）
+   * %i：分钟，数值(00-59)
+   * %S：秒(00-59)
+   * %s：秒(00-59)
+   * <p>
+   * %W：星期名
+   * %a：缩写星期名
+   * %b：缩写月名
+   * %c：月，数值
+   * %f：微秒
+   * %j：年的天 (001-366)
+   * %k：小时 (0-23)
+   * %l：小时 (1-12)
+   * <p>
+   * %p：AM 或 PM
+   * %r：时间，12-小时（hh:mm:ss AM 或 PM）
+   * %T：时间, 24-小时 (hh:mm:ss)
+   * <p>
+   * %U：周 (00-53) 星期日是一周的第一天
+   * %u：周 (00-53) 星期一是一周的第一天
+   * %V：周 (01-53) 星期日是一周的第一天，与 %X 使用
+   * %v：周 (01-53) 星期一是一周的第一天，与 %x 使用
+   * %w：周的天 （0=星期日, 6=星期六）
+   * <p>
+   * %X：年，其中的星期日是周的第一天，4 位，与 %V 使用
+   * %x：年，其中的星期一是周的第一天，4 位，与 %v 使用
+   *
+   * @param datePath
+   * @param format
+   * @param targetDate
+   * @return
+   */
+  public static BooleanExpression getFormatDateEqualExpression(DateTimePath datePath, String format, String targetDate) {
+    if (CommonUtils.isEmpty(targetDate)) {
+      return null;
+    }
+    return Expressions.stringTemplate("DATE_FORMAT({0},'" + format + "')", datePath).eq(targetDate);
+  }
+
 }
