@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("所有KeyValue模型")
-public class EnumClassVO {
+public class EnumClassVO<T> {
 
   @ApiModelProperty(value = "标签，不会为空", required = true)
   private String label;
@@ -28,7 +28,11 @@ public class EnumClassVO {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String value;
 
+  @ApiModelProperty("额外的数据，不存在时不会返回")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private T data;
+
   @ApiModelProperty("子类，空时不会返回")
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<EnumClassVO> children;
+  private List<EnumClassVO<T>> children;
 }

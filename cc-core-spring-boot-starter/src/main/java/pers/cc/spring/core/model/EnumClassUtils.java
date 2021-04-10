@@ -13,23 +13,34 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EnumClassUtils {
 
-  public static <T> List<EnumClassVO> generator(List<T> originList, String labelKey) {
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey) {
     return generator(originList, labelKey, "id", null);
   }
 
-  public static <T> List<EnumClassVO> generator(List<T> originList, String labelKey, String valueKey) {
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, boolean hasData) {
+    return generator(originList, labelKey, "id", null, hasData);
+  }
+
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, String valueKey) {
     return generator(originList, labelKey, valueKey, null);
   }
 
-  public static <T> List<EnumClassVO> generator(List<T> originList, String labelKey, String valueKey, String childrenKey) {
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, String valueKey, String childrenKey) {
+    return generator(originList, labelKey, valueKey, childrenKey, false);
+  }
+
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, String valueKey, String childrenKey, boolean hasData) {
     return originList.stream().map(t -> {
-      EnumClassVO.EnumClassVOBuilder builder = EnumClassVO.builder()
+      EnumClassVO.EnumClassVOBuilder<T> builder = EnumClassVO.<T>builder()
           .label(ClassUtils.getValue(t, labelKey))
           .value(ClassUtils.getValue(t, valueKey));
+      if (hasData) {
+        builder.data(t);
+      }
       if (childrenKey != null) {
         List<T> children = ClassUtils.getValue(t, childrenKey);
         if (children != null && children.size() > 0) {
-          builder.children(generator(children, labelKey, valueKey, childrenKey));
+          builder.children(generator(children, labelKey, valueKey, childrenKey, hasData));
         }
       }
       return builder.build();
