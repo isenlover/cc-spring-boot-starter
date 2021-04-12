@@ -109,10 +109,6 @@ public class DateUtils {
     return getAfterOrBeforeHourString(hour, dateFormat);
   }
 
-  public static Date getDateAfterOrBeforeHour(int hour) {
-    return getAfterOrBeforeHour(hour, dateFormat);
-  }
-
   public static Date getDateAfterOrBeforeMonth(int month) {
     return getDateAfterOrBeforeMonth(new Date(), month);
   }
@@ -132,13 +128,11 @@ public class DateUtils {
    * @return 格式化后的结果
    */
   public static String getAfterOrBeforeHourString(int hour, String format) {
-    return new SimpleDateFormat(format).format(getAfterOrBeforeHour(hour, format));
+    return new SimpleDateFormat(format).format(getDateAfterOrBeforeHour(hour));
   }
 
-  public static Date getAfterOrBeforeHour(int hour, String format) {
-    Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.HOUR, hour);
-    return calendar.getTime();
+  public static Date getDateAfterOrBeforeHour(int hour) {
+    return getDateAfterOrBeforeHour(new Date(), hour);
   }
 
 
