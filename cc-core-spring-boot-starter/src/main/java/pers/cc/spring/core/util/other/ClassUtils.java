@@ -247,9 +247,11 @@ public class ClassUtils {
     }
     Field[] fields = clazz.getDeclaredFields();
     fieldList.addAll(asList(fields));
-    fieldList = fieldList.stream()
-        .filter(field -> Arrays.stream(excludeFields).noneMatch(s -> s.equals(field.getName())))
-        .collect(Collectors.toList());
+    if (excludeFields != null) {
+      fieldList = fieldList.stream()
+          .filter(field -> Arrays.stream(excludeFields).noneMatch(s -> s.equals(field.getName())))
+          .collect(Collectors.toList());
+    }
     return fieldList;
   }
 

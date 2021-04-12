@@ -117,10 +117,10 @@ public class DateUtils {
     return getDateAfterOrBeforeMonth(new Date(), month);
   }
 
-  public static Date getDateAfterOrBeforeHour(Date date, int month) {
+  public static Date getDateAfterOrBeforeHour(Date date, int hour) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
-    calendar.add(Calendar.HOUR, month);
+    calendar.add(Calendar.HOUR, hour);
     return calendar.getTime();
   }
 

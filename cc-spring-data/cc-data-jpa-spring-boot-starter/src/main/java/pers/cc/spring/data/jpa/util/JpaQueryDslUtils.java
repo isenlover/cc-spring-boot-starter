@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.database.DatabaseUtils;
+import pers.cc.spring.core.util.other.DateUtils;
 import pers.cc.spring.data.jpa.page.PageRequest;
 
 import java.util.Arrays;
@@ -122,6 +123,13 @@ public class JpaQueryDslUtils {
     return orderSpecifierList.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
   }
 
+  public static OrderSpecifier[] getOrderList(OrderSpecifier... orderSpecifierList) {
+    if (orderSpecifierList !=null && orderSpecifierList.length > 0) {
+      return Arrays.stream(orderSpecifierList).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
+    }
+    return new OrderSpecifier[]{};
+  }
+
   /**
    * "DATE_FORMAT({0},'%Y-%m-%d')"
    * %Y：年，4 位
@@ -171,6 +179,10 @@ public class JpaQueryDslUtils {
       return null;
     }
     return Expressions.stringTemplate("DATE_FORMAT({0},'" + format + "')", datePath).eq(targetDate);
+  }
+
+  public static BooleanExpression getFormatDateEqualTodayExpression(DateTimePath datePath) {
+    return Expressions.stringTemplate("DATE_FORMAT({0},'%Y-%m-%d')", datePath).eq(DateUtils.getCurrentDayString());
   }
 
 }
