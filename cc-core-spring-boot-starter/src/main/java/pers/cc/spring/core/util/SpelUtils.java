@@ -78,6 +78,9 @@ public class SpelUtils {
   }
 
   public static String getSpELValue(String spEL, JoinPoint joinPoint) {
+    if (CommonUtils.isEmpty(spEL)) {
+      return "";
+    }
     ExpressionParser expressionParser = new SpelExpressionParser();
     EvaluationContext evaluationContext = SpelUtils.getEvaluationContext(spEL, joinPoint);
     Expression keyExpression = expressionParser.parseExpression(spEL);

@@ -3,12 +3,11 @@ package pers.cc.spring.core.annotation.swagger.extension.core;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import pers.cc.spring.core.annotation.swagger.extension.annotation.ApiGroup;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.core.Ordered;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import pers.cc.spring.core.annotation.swagger.extension.annotation.ApiGroup;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
@@ -55,7 +54,6 @@ public class OperationResponseClassGroupReader implements OperationBuilderPlugin
       context.operationBuilder().responseModel(newModelRef);
       Set<ResponseMessage> responseMessages = operation.getResponseMessages();
       responseMessages.forEach(responseMessage -> {
-        //TODO 这里200的状态码最好用变量代替
         if (responseMessage.getCode() == 200) {
           responseMessage = new ResponseMessageBuilder()
               .code(responseMessage.getCode())

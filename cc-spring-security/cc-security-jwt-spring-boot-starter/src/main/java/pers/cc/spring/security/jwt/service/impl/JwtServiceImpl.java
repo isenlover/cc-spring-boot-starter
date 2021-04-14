@@ -1,16 +1,16 @@
 package pers.cc.spring.security.jwt.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.security.jwt.model.JwtSecurityParamBean;
 import pers.cc.spring.security.jwt.model.JwtUser;
@@ -18,7 +18,10 @@ import pers.cc.spring.security.jwt.service.JwtService;
 import pers.cc.spring.security.jwt.util.JwtFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * jwt+spring-security token验证工具包
@@ -209,6 +212,11 @@ public class JwtServiceImpl implements JwtService {
   @Override
   public JwtUser getUserInfo() throws JwtException {
     return getUserInfo(JwtFactory.getRequest());
+  }
+
+  @Override
+  public String getUserId() throws JwtException {
+    return getUserInfo().getId();
   }
 
   @Override

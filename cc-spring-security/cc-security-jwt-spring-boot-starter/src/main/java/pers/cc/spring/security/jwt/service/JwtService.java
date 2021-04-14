@@ -74,6 +74,14 @@ public interface JwtService {
   JwtUser getUserInfo() throws JwtException;
 
   /**
+   * 从token中获取用户Id
+   *
+   * @return 用户信息
+   * @throws JwtException token异常
+   */
+  String getUserId() throws JwtException;
+
+  /**
    * 从token中获取用户信息
    *
    * @param token 凭证
