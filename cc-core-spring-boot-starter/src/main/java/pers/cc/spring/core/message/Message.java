@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import pers.cc.spring.core.util.CommonUtils;
-
-import java.util.List;
 
 /**
  * 消息类
@@ -104,6 +101,12 @@ public class Message<T> {
     Builder<T> builder = builder();
     builder.success(true);
     builder.data(data);
+    return ResponseEntity.ok(builder.build());
+  }
+
+  public static <T> ResponseEntity<Message<T>> responseOk() {
+    Builder<T> builder = builder();
+    builder.success(true);
     return ResponseEntity.ok(builder.build());
   }
 
