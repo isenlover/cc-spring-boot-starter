@@ -4,14 +4,14 @@ import lombok.Data;
 
 /**
  * com.cc.api.wechat.pers.cc.cfootball.common.model.pay
- * 发起微信支付后返回结果，此结果用于返回app/web等进行支付调用
- * 注：非支付结果类
+ * 前端成功发起支付后的结果回调
+ * 注：支付结果类
  *
  * @author chengce
  * @version 2017-10-25 14:57
  */
 @Data
-public class WxPayMessage extends WxPayBaseMessage {
+public class WechatPayCallbackMessage extends WxPayBaseMessage {
   // 以下字段在return_code为SUCCESS的时候有返回
   /**
    * 调用接口提交的应用ID
@@ -46,11 +46,37 @@ public class WxPayMessage extends WxPayBaseMessage {
    */
   private String err_code_des;
 
+  private String openid;
+
+  private String is_subscribe;
+
   // 以下字段在return_code 和result_code都为SUCCESS的时候有返回
   /**
    * 调用接口提交的交易类型，取值如下：JSAPI，NATIVE，APP
    */
   private String trade_type;
+
+  private String bank_type;
+
+  private String total_fee;
+
+  private String fee_type;
+
+  private String cash_fee;
+
+  private String cash_fee_type;
+
+  private String coupon_fee;
+
+  private String coupon_count;
+
+  private String transaction_id;
+
+  private String out_trade_no;
+
+  private String attach;
+
+  private String time_end;
 
   /**
    * 微信生成的预支付回话标识，用于后续接口调用中使用，该值有效期为2小时

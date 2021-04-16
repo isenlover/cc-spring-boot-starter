@@ -14,26 +14,26 @@ import pers.cc.spring.api.wechat.bean.WechatInformation;
 @Deprecated
 //@Service
 public class WechatBeanProcessor implements BeanPostProcessor {
-    @Autowired
-    WechatInformation wxAppBean;
+  @Autowired
+  WechatInformation wxAppBean;
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
+  @Override
+  public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    return bean;
+  }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean.getClass().getAnnotation(WechatApp.class) != null) {
-            WechatApp wxApp = bean.getClass().getAnnotation(WechatApp.class);
-            if (wxApp != null) {
-                wxAppBean.setAppId(wxApp.appId());
-                wxAppBean.setAppSecret(wxApp.appSecret());
-                wxAppBean.setMerchantId(wxApp.merchantId());
-                wxAppBean.setMerchantKey(wxApp.merchantKey());
-                wxAppBean.setToken(wxApp.token());
-            }
-        }
-        return bean;
+  @Override
+  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    if (bean.getClass().getAnnotation(WechatApp.class) != null) {
+      WechatApp wxApp = bean.getClass().getAnnotation(WechatApp.class);
+      if (wxApp != null) {
+        wxAppBean.setAppId(wxApp.appId());
+        wxAppBean.setAppSecret(wxApp.appSecret());
+        wxAppBean.setMerchantId(wxApp.merchantId());
+        wxAppBean.setMerchantKey(wxApp.merchantKey());
+        wxAppBean.setToken(wxApp.token());
+      }
     }
+    return bean;
+  }
 }

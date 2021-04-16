@@ -13,6 +13,7 @@ import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.core.util.other.DateUtils;
 import pers.cc.spring.core.util.other.MD5Utils;
 import pers.cc.spring.core.util.other.MathUtils;
+import pers.cc.spring.core.util.xml.JdomXmlUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -48,7 +49,7 @@ public class WechatSignImpl implements WechatSignService {
     map.put("sign", createSign("utf-8", map, merchantKey));
     // FIXME: 2018/4/30
 //        return CCJdomXmlUtil.getRequestXml(map);
-    return null;
+    return JdomXmlUtils.getRequestXml(map);
   }
 
   /**

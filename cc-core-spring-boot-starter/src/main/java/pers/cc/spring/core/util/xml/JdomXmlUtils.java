@@ -5,6 +5,7 @@ import org.jdom2.JDOMException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 
 /**
@@ -23,22 +24,22 @@ public class JdomXmlUtils {
 //     * @return xml
 //     */
   public static String getRequestXml(SortedMap<Object, Object> parameters) {
-//        StringBuffer sb = new StringBuffer();
-//        sb.append("<xml>");
-//        Set<Map.Entry<Object, Object>> es = parameters.entrySet();
-//        for (Object e : es) {
-//            Map.Entry entry = (Map.Entry) e;
-//            String k = (String) entry.getKey();
-//            String v = (String) entry.getValue();
-//            if ("attach".equalsIgnoreCase(k) || "body".equalsIgnoreCase(k)) {
-//                sb.append("<").append(k).append(">").append("<![CDATA[").append(v).append("]]></").append(k).append(">");
-//            } else {
-//                sb.append("<").append(k).append(">").append(v).append("</").append(k).append(">");
-//            }
-//        }
-//        sb.append("</xml>");
-//        return sb.toString();
-    return null;
+    StringBuilder sb = new StringBuilder();
+    sb.append("<xml>");
+    Set<Map.Entry<Object, Object>> es = parameters.entrySet();
+    for (Object e : es) {
+      Map.Entry entry = (Map.Entry) e;
+      String k = (String) entry.getKey();
+      String v = (String) entry.getValue();
+      if ("attach".equalsIgnoreCase(k) || "body".equalsIgnoreCase(k)) {
+        sb.append("<").append(k).append(">").append("<![CDATA[").append(v).append("]]></").append(k).append(">");
+      } else {
+        sb.append("<").append(k).append(">").append(v).append("</").append(k).append(">");
+      }
+    }
+    sb.append("</xml>");
+    return sb.toString();
+//    return null;
   }
 
   //

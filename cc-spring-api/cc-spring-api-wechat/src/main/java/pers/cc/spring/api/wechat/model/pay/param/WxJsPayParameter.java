@@ -10,64 +10,64 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @version 2017-10-26 12:54
  */
 public class WxJsPayParameter {
-    private String appId;
+  private String appId;
 
-    private String timeStamp;
+  private String timeStamp;
 
-    private String nonceStr;
+  private String nonceStr;
 
-    private String signType;
+  private String signType;
 
-    private String Package;
+  private String Package;
 
-    private String paySign;
+  private String paySign;
 
-    public String getAppId() {
-        return appId;
-    }
+  public String getAppId() {
+    return appId;
+  }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
+  public void setAppId(String appId) {
+    this.appId = appId;
+  }
 
-    public String getTimeStamp() {
-        return timeStamp;
-    }
+  public String getTimeStamp() {
+    return timeStamp;
+  }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
+  public void setTimeStamp(String timeStamp) {
+    this.timeStamp = timeStamp;
+  }
 
-    public String getNonceStr() {
-        return nonceStr;
-    }
+  public String getNonceStr() {
+    return nonceStr;
+  }
 
-    public void setNonceStr(String nonceStr) {
-        this.nonceStr = nonceStr;
-    }
+  public void setNonceStr(String nonceStr) {
+    this.nonceStr = nonceStr;
+  }
 
-    public String getSignType() {
-        return signType;
-    }
+  public String getSignType() {
+    return signType;
+  }
 
-    public void setSignType(String signType) {
-        this.signType = signType;
-    }
+  public void setSignType(String signType) {
+    this.signType = signType;
+  }
 
-    @JSONField(name = "package")
-    public String getPackage() {
-        return Package;
-    }
+  @JSONField(name = "package")
+  public String getPackage() {
+    return Package;
+  }
 
-    public void setPackage(String aPackage) {
-        Package = "prepay_id=" + aPackage;
-    }
+  public void setPackage(String aPackage) {
+    Package = "prepay_id=" + aPackage;
+  }
 
-    public String getPaySign() {
-        return paySign;
-    }
+  public String getPaySign() {
+    return paySign;
+  }
 
-    public void setPaySign(String paySign) {
-        this.paySign = paySign;
-    }
+  public void setPaySign(String paySign) {
+    this.paySign = paySign;
+  }
 }

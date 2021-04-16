@@ -37,52 +37,52 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatPayImpl implements WechatPayService {
 
-    @Autowired
-    WechatSignService wechatSignService;
+  @Autowired
+  WechatSignService wechatSignService;
 
-    @Autowired
-    WechatInformation wechatAppBean;
+  @Autowired
+  WechatInformation wechatAppBean;
 
-    @Value("${wechat.url.pay.unifiedOrder}")
-    private String payUrl;
+  @Value("${wechat.url.pay.unifiedOrder}")
+  private String payUrl;
 
-    @Value("${wechat.url.pay.refund}")
-    private String refundUrl;
+  @Value("${wechat.url.pay.refund}")
+  private String refundUrl;
 
 
-    @Override
-    public Message<WxJsPayParameter> JsPay(WxUnifiedOrderDTO wxUnifiedOrderDTO) {
-        wxUnifiedOrderDTO.setAppid(wechatAppBean.getAppId());
-        wxUnifiedOrderDTO.setMch_id(wechatAppBean.getMerchantId());
+  @Override
+  public Message<WxJsPayParameter> JsPay(WxUnifiedOrderDTO wxUnifiedOrderDTO) {
+    Message<WxPayMessage> wxPayMessageMessage = pay(wxUnifiedOrderDTO);
+    Message<WxJsPayParameter> message = new Message<>();
+    if (wxPayMessageMessage.isSuccess()) {
+      WxPayMessage payMessage = wxPayMessageMessage.getData();
 
-//        CCUtil.printLn("appId: ----" + appId);
-//        CCUtil.printLn("merchantId: ----" + merchantId);
-//        CCUtil.printLn("merchantKey: ----" + merchantKey);
-
-        Message<WxJsPayParameter> message = new Message<>();
-        String requestXml = wechatSignService.createSignAndXml(wxUnifiedOrderDTO, wechatAppBean.getMerchantKey());
-        Message<WxPayMessage> wxPayMessageMessage = WechatUtil.httpsPay(payUrl, requestXml);
-        if (wxPayMessageMessage.isSuccess()) {
-            WxPayMessage payMessage = wxPayMessageMessage.getData();
-
-            WxJsPayParameter wxJsPayParameter = new WxJsPayParameter();
-            wxJsPayParameter.setAppId(wxUnifiedOrderDTO.getAppid());
-            wxJsPayParameter.setTimeStamp(String.valueOf(DateUtils.getTimestamp(TimeUnit.SECONDS)));
-            wxJsPayParameter.setNonceStr(MathUtils.getRandom(16, MathUtils.NonceType.CHAR));
-            wxJsPayParameter.setSignType("MD5");
-            wxJsPayParameter.setPackage(payMessage.getPrepay_id());
-            wxJsPayParameter.setPaySign(
-                    wechatSignService.createSign("UTF-8", ClassUtils.objectToSortedMap(wxJsPayParameter), wechatAppBean.getMerchantKey()));
-            message.setSuccess(true);
-            message.setData(wxJsPayParameter);
-        } else {
-            message.setMessage(wxPayMessageMessage.getMessage());
-        }
-        return message;
+      WxJsPayParameter wxJsPayParameter = new WxJsPayParameter();
+      wxJsPayParameter.setAppId(wxUnifiedOrderDTO.getAppid());
+      wxJsPayParameter.setTimeStamp(String.valueOf(DateUtils.getTimestamp(TimeUnit.SECONDS)));
+      wxJsPayParameter.setNonceStr(MathUtils.getRandom(16, MathUtils.NonceType.CHAR));
+      wxJsPayParameter.setSignType("MD5");
+      wxJsPayParameter.setPackage(payMessage.getPrepay_id());
+      wxJsPayParameter.setPaySign(
+          wechatSignService.createSign("UTF-8", ClassUtils.objectToSortedMap(wxJsPayParameter), wechatAppBean.getMerchantKey()));
+      message.setSuccess(true);
+      message.setData(wxJsPayParameter);
+    } else {
+      message.setMessage(wxPayMessageMessage.getMessage());
     }
+    return message;
+  }
 
-    @Override
-    public Message<WxRefundMessage> refund(WxRefundDTO wxRefundDTO) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+  @Override
+  public Message<WxPayMessage> pay(WxUnifiedOrderDTO wxUnifiedOrderDTO) {
+    wxUnifiedOrderDTO.setAppid(wechatAppBean.getAppId());
+    wxUnifiedOrderDTO.setMch_id(wechatAppBean.getMerchantId());
+    String requestXml = wechatSignService.createSignAndXml(wxUnifiedOrderDTO, wechatAppBean.getMerchantKey());
+    return WechatUtil.httpsPay(payUrl, requestXml);
+  }
+
+  @Override
+  public Message<WxRefundMessage> refund(WxRefundDTO wxRefundDTO) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
 //        wxRefundDTO.setAppid(appId);
 //        wxRefundDTO.setMch_id(merchantId);
 //
@@ -174,7 +174,7 @@ public class WechatPayImpl implements WechatPayService {
 //            throw e;
 //        }
 //        return message;
-        // FIXME: 2018/4/30
-        return Message.<WxRefundMessage>ok().build();
-    }
+    // FIXME: 2018/4/30
+    return Message.<WxRefundMessage>ok().build();
+  }
 }
