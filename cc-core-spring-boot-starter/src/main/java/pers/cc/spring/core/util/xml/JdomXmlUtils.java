@@ -1,12 +1,15 @@
 package pers.cc.spring.core.util.xml;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * 操作Excel文档的接口
@@ -72,37 +75,36 @@ public class JdomXmlUtils {
 
   //
   public static Map<String, Object> doXMLParse(String strxml) throws JDOMException, IOException {
-//        strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
-//
-//        if (null == strxml || "".equals(strxml)) {
-//            return null;
-//        }
-//
-//        Map<String, Object> m = new HashMap<>();
-//
-//        InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
-//        SAXBuilder builder = new SAXBuilder();
-//        Document doc = builder.build(in);
-//        Element root = doc.getRootElement();
-//        List list = root.getChildren();
-//        for (Object aList : list) {
-//            Element e = (Element) aList;
-//            String k = e.getName();
-//            String v;
-//            List children = e.getChildren();
-//            if (children.isEmpty()) {
-//                v = e.getTextNormalize();
-//            } else {
-//                v = getChildrenText(children);
-//            }
-//
-//            m.put(k, v);
-//        }
-//
-//        //关闭流
-//        in.close();
-//
-//        return m;
-    return null;
+    strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
+
+    if ("".equals(strxml)) {
+      return null;
+    }
+
+    Map<String, Object> m = new HashMap<>();
+
+    InputStream in = new ByteArrayInputStream(strxml.getBytes(StandardCharsets.UTF_8));
+    SAXBuilder builder = new SAXBuilder();
+    Document doc = builder.build(in);
+    Element root = doc.getRootElement();
+    List<Element> list = root.getChildren();
+    for (Object aList : list) {
+      Element e = (Element) aList;
+      String k = e.getName();
+      String v;
+      List<Element> children = e.getChildren();
+      if (children.isEmpty()) {
+        v = e.getTextNormalize();
+      } else {
+        v = getChildrenText(children);
+      }
+
+      m.put(k, v);
+    }
+
+    //关闭流
+    in.close();
+
+    return m;
   }
 }

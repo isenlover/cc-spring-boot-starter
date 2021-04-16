@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>cc-spring-api-core</module>
+    <module>cc-spring-api-nim</module>
     <module>cc-spring-api-wechat</module>
     <module>cc-spring-api-aliyun</module>
     <module>cc-api-ifeige-spring-boot-stater</module>

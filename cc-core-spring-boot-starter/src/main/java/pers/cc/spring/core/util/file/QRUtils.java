@@ -28,7 +28,7 @@ public class QRUtils {
   private QRUtils() {
   }
 
-  public static BufferedImage toBufferedImage(BitMatrix matrix) {
+  private static BufferedImage toBufferedImage(BitMatrix matrix) {
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -55,8 +55,9 @@ public class QRUtils {
   }
 
   public static File writeToFile(int width, int height, String url) throws WriterException, IOException {
-    Hashtable<EncodeHintType, String> hints = new Hashtable<>();
+    Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
     hints.put(EncodeHintType.CHARACTER_SET, "utf-8");   // 内容所使用字符集编码
+    hints.put(EncodeHintType.MARGIN, 0); //边距
 
     BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, width, height, hints);
     // 生成二维码

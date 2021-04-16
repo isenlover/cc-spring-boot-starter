@@ -79,7 +79,7 @@ public class ClassUtils {
     return obj;
   }
 
-  public static <T> T mapWechatMapToObject(Map<String, String> map, Class<T> beanClass) {
+  public static <T> T mapWechatMapToObject(Map<String, String> map, Class<T> beanClass, boolean isCaptureName) {
     if (map == null)
       return null;
     T obj = null;
@@ -91,7 +91,7 @@ public class ClassUtils {
       for (PropertyDescriptor property : propertyDescriptors) {
         Method setter = property.getWriteMethod();
         if (setter != null) {
-          setter.invoke(obj, map.get(StringUtils.getCaptureName(property.getName())));
+          setter.invoke(obj, map.get(!isCaptureName ? property.getName() : StringUtils.getCaptureName(property.getName())));
         }
       }
     } catch (Exception e) {

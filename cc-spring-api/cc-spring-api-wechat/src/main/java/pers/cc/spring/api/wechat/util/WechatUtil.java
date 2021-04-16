@@ -1,6 +1,7 @@
 package pers.cc.spring.api.wechat.util;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import pers.cc.spring.api.wechat.model.other.AccessTokenBo;
 import pers.cc.spring.api.wechat.model.other.WxBaseResponse;
 import pers.cc.spring.api.wechat.model.pay.response.WxPayMessage;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @author chengce
  * @version 2016-07-25 15:09
  */
+@Slf4j
 public class WechatUtil {
 
   /**
@@ -117,6 +119,7 @@ public class WechatUtil {
     } catch (Exception e) {
       httpMessage.setCode(WechatMessageCode.BAD_REQUEST_WECHAT_HTTP_ANALYSIS.getCode());
       httpMessage.setMessage(WechatMessageCode.BAD_REQUEST_WECHAT_HTTP_ANALYSIS.getMessage());
+      log.error(e.getLocalizedMessage());
       return httpMessage;
     }
     return httpMessage;

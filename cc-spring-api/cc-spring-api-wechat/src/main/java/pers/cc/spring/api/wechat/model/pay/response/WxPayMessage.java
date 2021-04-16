@@ -61,4 +61,9 @@ public class WxPayMessage extends WxPayBaseMessage {
    * trade_type为NATIVE时有返回，用于生成二维码，展示给用户进行扫码支付
    */
   private String code_url;
+
+  /**
+   * 自定义二维码Base64返回
+   */
+  private String qrBase64Code;
 }

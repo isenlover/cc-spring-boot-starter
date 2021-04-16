@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pers.cc.spring.api.wechat.enums.WechatPayTradeType;
 
 /**
  * com.cc.api.wechat.pers.cc.cfootball.common.model.pay
@@ -133,7 +132,7 @@ public class WxUnifiedOrderDTO {
    * 支付类型
    * JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付，统一下单接口trade_type的传参可参考这里
    */
-  private WechatPayTradeType trade_type;
+  private String trade_type;
 
   /**
    * optional
@@ -155,4 +154,10 @@ public class WxUnifiedOrderDTO {
    * 公众号支付需要提供openId
    */
   private String openid;
+
+  /**
+   * 自定义，二维码宽度、高度
+   */
+  private int qrWidth;
+  private int qrHeight;
 }

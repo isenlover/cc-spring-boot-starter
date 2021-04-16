@@ -1,6 +1,7 @@
 package pers.cc.spring.api.wechat.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import pers.cc.spring.api.wechat.service.WechatSignService;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.core.util.other.DateUtils;
-import pers.cc.spring.core.util.other.MD5Utils;
 import pers.cc.spring.core.util.other.MathUtils;
 import pers.cc.spring.core.util.xml.JdomXmlUtils;
 
@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @author chengce
  * @version 2017-10-26 12:58
  */
+@Slf4j
 @Service
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatSignImpl implements WechatSignService {
@@ -46,9 +47,9 @@ public class WechatSignImpl implements WechatSignService {
       return null;
     }
     SortedMap<Object, Object> map = ClassUtils.objectToSortedMap(obj);
+    map.remove("qrWidth");
+    map.remove("qrHeight");
     map.put("sign", createSign("utf-8", map, merchantKey));
-    // FIXME: 2018/4/30
-//        return CCJdomXmlUtil.getRequestXml(map);
     return JdomXmlUtils.getRequestXml(map);
   }
 
@@ -169,18 +170,60 @@ public class WechatSignImpl implements WechatSignService {
    * @return 签名
    */
   public String createSign(String characterEncoding, SortedMap<Object, Object> parameters, String appSecret) {
+//    StringBuffer sb = new StringBuffer();
+//    Set es = parameters.entrySet();
+//    for (Object e : es) {
+//      Map.Entry entry = (Map.Entry) e;
+//      String k = (String) entry.getKey();
+//      Object v = entry.getValue();
+//      if (null != v && !"".equals(v)
+//          && !"sign".equals(k) && !"key".equals(k)) {
+//        sb.append(k).append("=").append(v).append("&");
+//      }
+//    }
+//    sb.append("key=").append(appSecret);
+//    return MD5Utils.getMD5(sb.toString(), characterEncoding).toUpperCase();
+
+    // FIXME 2021-4-16 修改
     StringBuffer sb = new StringBuffer();
-    Set es = parameters.entrySet();
-    for (Object e : es) {
-      Map.Entry entry = (Map.Entry) e;
+    Set es = parameters.entrySet();//所有参与传参的参数按照accsii排序（升序）
+    Iterator it = es.iterator();
+    while (it.hasNext()) {
+      Map.Entry entry = (Map.Entry) it.next();
       String k = (String) entry.getKey();
       Object v = entry.getValue();
       if (null != v && !"".equals(v)
           && !"sign".equals(k) && !"key".equals(k)) {
-        sb.append(k).append("=").append(v).append("&");
+        sb.append(k + "=" + v + "&");
       }
     }
-    sb.append("key=").append(appSecret);
-    return MD5Utils.getMD5(sb.toString(), characterEncoding).toUpperCase();
+    sb.append("key=" + appSecret);
+//    log.info("签名完成：" + sb.toString());
+    return encodeMD5(sb.toString());
+  }
+
+  public String encodeMD5(String str) {
+    try {
+      MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+      byte[] inputByteArray = (str).getBytes();
+      messageDigest.update(inputByteArray);
+      byte[] resultByteArray = messageDigest.digest();
+      return byteArrayToHex(resultByteArray);
+    } catch (NoSuchAlgorithmException e) {
+      return null;
+    }
+  }
+
+  // 辅助 encodeMD5 方法实现
+  private String byteArrayToHex(byte[] byteArray) {
+    char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    char[] resultCharArray = new char[byteArray.length * 2];
+    int index = 0;
+    for (byte b : byteArray) {
+      resultCharArray[index++] = hexDigits[b >>> 4 & 0xf];
+      resultCharArray[index++] = hexDigits[b & 0xf];
+    }
+    // 字符数组组合成字符串返回
+    return new String(resultCharArray);
   }
 }

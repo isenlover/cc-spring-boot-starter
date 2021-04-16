@@ -1,11 +1,14 @@
 package pers.cc.spring.api.wechat.service.impl;
 
+import com.google.zxing.WriterException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import pers.cc.spring.api.wechat.annotation.EnableWechatOfficialAccount;
 import pers.cc.spring.api.wechat.bean.WechatInformation;
+import pers.cc.spring.api.wechat.enums.WechatPayTradeType;
 import pers.cc.spring.api.wechat.model.pay.dto.WxRefundDTO;
 import pers.cc.spring.api.wechat.model.pay.dto.WxUnifiedOrderDTO;
 import pers.cc.spring.api.wechat.model.pay.param.WxJsPayParameter;
@@ -15,16 +18,21 @@ import pers.cc.spring.api.wechat.service.WechatPayService;
 import pers.cc.spring.api.wechat.service.WechatSignService;
 import pers.cc.spring.api.wechat.util.WechatUtil;
 import pers.cc.spring.core.message.Message;
+import pers.cc.spring.core.util.file.QRUtils;
 import pers.cc.spring.core.util.other.ClassUtils;
 import pers.cc.spring.core.util.other.DateUtils;
 import pers.cc.spring.core.util.other.MathUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +41,7 @@ import java.util.concurrent.TimeUnit;
  * @author chengce
  * @version 2017-10-26 13:22
  */
+@Slf4j
 @Service
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatPayImpl implements WechatPayService {
@@ -78,7 +87,22 @@ public class WechatPayImpl implements WechatPayService {
     wxUnifiedOrderDTO.setAppid(wechatAppBean.getAppId());
     wxUnifiedOrderDTO.setMch_id(wechatAppBean.getMerchantId());
     String requestXml = wechatSignService.createSignAndXml(wxUnifiedOrderDTO, wechatAppBean.getMerchantKey());
-    return WechatUtil.httpsPay(payUrl, requestXml);
+    Message<WxPayMessage> wxPayMessageMessage = WechatUtil.httpsPay(payUrl, requestXml);
+    if (wxUnifiedOrderDTO.getTrade_type().equals(WechatPayTradeType.NATIVE.name())) {
+      wxPayMessageMessage.ifPresent(wxPayMessage -> {
+        File file;
+        String qrBase64Code = null;
+        try {
+          file = QRUtils.writeToFile(wxUnifiedOrderDTO.getQrWidth(), wxUnifiedOrderDTO.getQrHeight(), wxPayMessage.getCode_url());
+          qrBase64Code = Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(file.getPath())));
+          file.delete();
+        } catch (WriterException | IOException e) {
+          log.error("微信支付二维码转图片过程中异常，" + e.getLocalizedMessage());
+        }
+        wxPayMessage.setQrBase64Code("data:image/png;base64," + qrBase64Code);
+      });
+    }
+    return wxPayMessageMessage;
   }
 
   @Override
