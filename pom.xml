@@ -147,6 +147,11 @@
       </dependency>
       <dependency>
         <groupId>pers.cc</groupId>
+        <artifactId>cc-spring-api-aliyun-alipay</artifactId>
+        <version>${cc-spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>pers.cc</groupId>
         <artifactId>cc-spring-api-aliyun</artifactId>
         <version>${cc-spring.version}</version>
       </dependency>

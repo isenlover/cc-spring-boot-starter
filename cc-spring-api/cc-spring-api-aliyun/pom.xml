@@ -15,6 +15,7 @@
     <module>cc-spring-api-aliyun-oss</module>
     <module>cc-spring-api-aliyun-sms</module>
     <module>cc-spring-api-aliyun-common</module>
+    <module>cc-spring-api-aliyun-alipay</module>
   </modules>
 
   <artifactId>cc-spring-api-aliyun</artifactId>

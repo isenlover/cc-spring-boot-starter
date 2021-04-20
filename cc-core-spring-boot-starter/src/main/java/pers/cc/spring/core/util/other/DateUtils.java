@@ -4,8 +4,11 @@ import pers.cc.spring.core.exception.BaseRuntimeException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -23,6 +26,15 @@ public class DateUtils {
   public static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
   public static final String timeFormat = "HH:mm:ss";
   public static final String dateTimeMsFormat = "yyyy-MM-dd HH:mm:ss:SSS";
+
+  /**
+   * 从当前时间获得
+   * 本周周一
+   * @return
+   */
+  public static LocalDate getMonday() {
+    return LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
+  }
 
   /**
    * 获取以现在时间为基准之后或之前天数的时间
@@ -425,5 +437,9 @@ public class DateUtils {
 
   public static Date toDate(LocalDateTime localDateTime) {
     return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  public static Date toDate(LocalDate localDate) {
+    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
 }

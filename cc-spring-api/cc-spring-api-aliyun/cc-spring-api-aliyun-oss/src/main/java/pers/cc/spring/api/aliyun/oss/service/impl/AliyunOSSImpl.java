@@ -41,7 +41,7 @@ import java.util.UUID;
 public class AliyunOSSImpl implements AliyunOSSService {
   @Resource
   AliyunOSSParamBean aliyunOSSParamBean;
-  
+
   @Resource
   AliyunParamBean aliyunParamBean;
 
@@ -110,7 +110,7 @@ public class AliyunOSSImpl implements AliyunOSSService {
 
   @Override
   public String uploadFile(File file, boolean delete) {
-    String key = UUID.randomUUID().toString().replaceAll("-", "") + FileUtils.getFileExt(file);
+    String key = "image/" + UUID.randomUUID().toString().replaceAll("-", "") + FileUtils.getFileExt(file);
     String url;
     if (CommonUtils.isNotEmpty(aliyunOSSParamBean.getCdnUrl())) {
       url = aliyunOSSParamBean.getCdnUrl();

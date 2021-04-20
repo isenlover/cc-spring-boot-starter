@@ -25,6 +25,14 @@ public class PageRequest extends org.springframework.data.domain.PageRequest {
     return of(page, size, Sort.unsorted());
   }
 
+  public static PageRequest of(int page, int size, int maxPageSize) {
+    return of(page, Math.min(maxPageSize, size), Sort.unsorted());
+  }
+
+  public static PageRequest of(int page, int size, int maxPageSize, int maxPage) {
+    return of(Math.min(page, maxPage), Math.min(maxPageSize, size), Sort.unsorted());
+  }
+
   public static PageRequest of(int page, int size, Sort sort) {
     return new PageRequest(page, size, sort);
   }

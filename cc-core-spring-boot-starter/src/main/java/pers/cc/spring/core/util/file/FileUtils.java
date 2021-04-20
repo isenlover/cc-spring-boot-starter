@@ -3,7 +3,6 @@ package pers.cc.spring.core.util.file;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -72,5 +71,9 @@ public class FileUtils {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static String getCurrentPath() {
+    return new File(FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath();
   }
 }

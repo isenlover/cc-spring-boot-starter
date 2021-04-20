@@ -6,8 +6,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.cc.spring.core.util.CommonUtils;
-import pers.cc.spring.core.util.other.ClassUtils;
-import pers.cc.spring.core.util.other.StringUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -22,8 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Arrays.asList;
+import java.util.Set;
 
 /**
  * http工具类
@@ -605,5 +602,36 @@ public class HttpUtils {
     } else {
       return null;
     }
+  }
+
+  /**
+   * 转化参数放map
+   * @param request
+   * @return
+   */
+  public static Map<String, String> convertRequestParamsToMap(HttpServletRequest request) {
+    Map<String, String> retMap = new HashMap<String, String>();
+
+    Set<Map.Entry<String, String[]>> entrySet = request.getParameterMap().entrySet();
+
+    for (Map.Entry<String, String[]> entry : entrySet) {
+      String name = entry.getKey();
+      String[] values = entry.getValue();
+      int valLen = values.length;
+
+      if (valLen == 1) {
+        retMap.put(name, values[0]);
+      } else if (valLen > 1) {
+        StringBuilder sb = new StringBuilder();
+        for (String val : values) {
+          sb.append(",").append(val);
+        }
+        retMap.put(name, sb.substring(1));
+      } else {
+        retMap.put(name, "");
+      }
+    }
+
+    return retMap;
   }
 }

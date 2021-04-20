@@ -2,6 +2,7 @@ package pers.cc.spring.core.util.other;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -35,20 +36,20 @@ public class MD5Utils {
   /**
    * 返回32位加密代码
    *
-   * @param origin      原始代码
-   * @param charsetname utf-8
-   * @return 加密后代码
+   * @param origin  原始代码
+   * @param charset 字符集
+   * @return 加密后字符串
    */
-  public static String getMD5(String origin, String charsetname) {
+  public static String getMD5(String origin, Charset charset) {
     String resultString = null;
     try {
       resultString = origin;
       MessageDigest md = MessageDigest.getInstance("MD5");
       md.update(origin.getBytes(StandardCharsets.UTF_8));
-      if (charsetname == null || "".equals(charsetname)) {
+      if (charset == null) {
         resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
       } else {
-        resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetname)));
+        resultString = byteArrayToHexString(md.digest(resultString.getBytes(charset.name())));
       }
     } catch (Exception ignored) {
     }
@@ -56,9 +57,9 @@ public class MD5Utils {
   }
 
   public static String getMD5(String origin) {
-    return getMD5(origin, "UTF-8");
+    return getMD5(origin, StandardCharsets.UTF_8);
   }
 
   private static final String hexDigits[] = {"0", "1", "2", "3", "4", "5",
-      "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+      "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "i", "s", "n"};
 }

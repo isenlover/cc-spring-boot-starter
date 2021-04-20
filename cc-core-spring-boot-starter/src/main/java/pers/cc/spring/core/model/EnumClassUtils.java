@@ -3,7 +3,7 @@ package pers.cc.spring.core.model;
 import lombok.extern.slf4j.Slf4j;
 import pers.cc.spring.core.util.other.ClassUtils;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +49,9 @@ public class EnumClassUtils {
       }
       return builder.build();
     })
-        .collect(Collectors.toList());
+        .collect(Collectors.collectingAndThen(
+            Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EnumClassVO::getValue))),
+            ArrayList::new
+        ));
   }
 }

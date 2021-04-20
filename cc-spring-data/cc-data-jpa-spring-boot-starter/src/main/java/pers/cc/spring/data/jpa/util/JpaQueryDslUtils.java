@@ -10,10 +10,7 @@ import pers.cc.spring.core.util.database.DatabaseUtils;
 import pers.cc.spring.core.util.other.DateUtils;
 import pers.cc.spring.data.jpa.page.PageRequest;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +60,28 @@ public class JpaQueryDslUtils {
     }
     Long[] split = Arrays.stream(dateTime.split(",")).map(Long::valueOf).toArray(Long[]::new);
     return dateTimePath.between(new Date(split[0]), new Date(split[1]));
+  }
+
+  public static BooleanExpression getDateTimeBetweenExpression(Date date, DateTimePath fromDateTimePath, DateTimePath toDateTimePath) {
+    if (CommonUtils.isEmpty(date, fromDateTimePath, toDateTimePath)) {
+      return null;
+    }
+    return fromDateTimePath.goe(date).and(toDateTimePath.loe(date));
+  }
+
+  public static BooleanExpression getDateTimeBetweenExpression(String date, DateTimePath fromDateTimePath, DateTimePath toDateTimePath) {
+    if (CommonUtils.isEmpty(date, fromDateTimePath, toDateTimePath)) {
+      return null;
+    }
+    Date targetDate = new Date(Long.valueOf(date));
+    return fromDateTimePath.loe(targetDate).and(toDateTimePath.goe(targetDate));
+  }
+
+  public static BooleanExpression getDateTimeBetweenExpression(DateTimePath dateTimePath, Date from, Date to) {
+    if (CommonUtils.isEmpty(from, to)) {
+      return null;
+    }
+    return dateTimePath.between(from, to);
   }
 
   public static BooleanExpression getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
@@ -124,7 +143,7 @@ public class JpaQueryDslUtils {
   }
 
   public static OrderSpecifier[] getOrderList(OrderSpecifier... orderSpecifierList) {
-    if (orderSpecifierList !=null && orderSpecifierList.length > 0) {
+    if (orderSpecifierList != null && orderSpecifierList.length > 0) {
       return Arrays.stream(orderSpecifierList).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
     }
     return new OrderSpecifier[]{};
@@ -179,6 +198,20 @@ public class JpaQueryDslUtils {
       return null;
     }
     return Expressions.stringTemplate("DATE_FORMAT({0},'" + format + "')", datePath).eq(targetDate);
+  }
+
+  public static BooleanExpression getFormatDateEqualExpression(DateTimePath datePath, String targetDate) {
+    if (CommonUtils.isEmpty(targetDate)) {
+      return null;
+    }
+    return Expressions.stringTemplate("DATE_FORMAT({0},'%Y-%m-%d')", datePath).eq(targetDate);
+  }
+
+  public static BooleanExpression getFormatDateEqualExpression(DateTimePath datePath, Date targetDate) {
+    if (CommonUtils.isEmpty(targetDate)) {
+      return null;
+    }
+    return Expressions.stringTemplate("DATE_FORMAT({0},'%Y-%m-%d')", datePath).eq(DateUtils.getString(targetDate));
   }
 
   public static BooleanExpression getFormatDateEqualTodayExpression(DateTimePath datePath) {
