@@ -51,6 +51,8 @@ public class HttpUtils {
     httpURLConnection.setDoOutput(true);
     httpURLConnection.setDoInput(true);
     httpURLConnection.setUseCaches(false);
+    httpURLConnection.setReadTimeout(10000);
+    httpURLConnection.setConnectTimeout(10000);
     // 设置请求方式（GET/POST）
     httpURLConnection.setRequestMethod(httpMethod.name());
 
@@ -124,6 +126,8 @@ public class HttpUtils {
     httpsURLConnection.setDoOutput(true);
     httpsURLConnection.setDoInput(true);
     httpsURLConnection.setUseCaches(false);
+    httpsURLConnection.setReadTimeout(10000);
+    httpsURLConnection.setConnectTimeout(10000);
     // 设置请求方式（GET/POST）
     httpsURLConnection.setRequestMethod(httpMethod.name());
 
