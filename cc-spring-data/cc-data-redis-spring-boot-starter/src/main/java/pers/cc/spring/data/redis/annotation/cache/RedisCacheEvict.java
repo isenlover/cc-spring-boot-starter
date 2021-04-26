@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 // TODO: 2018/6/15 加@repeatable
 public @interface RedisCacheEvict {
   /**
-   * 默认为函数名称
    * 支持SpEL条件语句
    */
   String[] key();
