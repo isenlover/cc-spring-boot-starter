@@ -1,5 +1,6 @@
 package pers.cc.spring.api.nim.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import pers.cc.spring.api.nim.exception.NIMUserCreateException;
 import pers.cc.spring.api.nim.model.NIMUser;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateDTO;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateResp;
+import pers.cc.spring.api.nim.model.team.NIMTeamAddUserDTO;
 import pers.cc.spring.api.nim.model.team.NIMTeamDTO;
 import pers.cc.spring.api.nim.model.team.vo.NIMTeamVO;
 import pers.cc.spring.api.nim.service.NIMService;
@@ -73,6 +75,28 @@ public class NIMServiceImpl implements NIMService {
 
   @Override
   public Message<NIMTeamVO> createTeam(NIMTeamDTO nimTeamDTO) {
-    return null;
+    String resp;
+    try {
+      resp = HttpUtils.httpsPost(NimUrl.CREATE_TEAM.getDescription()
+          , HttpUtils.getUrlParamsByObject(nimTeamDTO)
+          , nimHelper.getHttpHeaders());
+    } catch (Exception e) {
+      throw new NIMChatroomCreateException();
+    }
+    return Message.ok(JSON.parseObject(resp, NIMTeamVO.class));
+//    return nimHelper.checkResponse(resp, NIMTeamVO.class);
+  }
+
+  @Override
+  public Message<Void> addUserToTeam(NIMTeamAddUserDTO addUserDTO) {
+    String resp;
+    try {
+      resp = HttpUtils.httpsPost(NimUrl.JOIN_TEAM.getDescription()
+          , HttpUtils.getUrlParamsByObject(addUserDTO)
+          , nimHelper.getHttpHeaders());
+    } catch (Exception e) {
+      throw new NIMChatroomCreateException();
+    }
+    return nimHelper.checkResponse(resp);
   }
 }

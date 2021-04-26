@@ -70,6 +70,15 @@ public class NIMHelper {
     return message;
   }
 
+  public Message<Void> checkResponse(String resp) {
+    NIMBaseResponse baseResponse = JSON.parseObject(resp, NIMBaseResponse.class);
+    if (baseResponse.getCode() == 200) {
+      return Message.<Void>ok().build();
+    } else {
+      return Message.<Void>failed().message(getNIMResponseError(baseResponse.getCode())).build();
+    }
+  }
+
   public <T> Message<List<NIMHistoryContentVO<T>>> getHistoryResponse(String resp, Class<T> clz) {
     NIMHistoryBaseVO<T> baseVO = JSON.parseObject(resp, new TypeReference<NIMHistoryBaseVO<T>>(clz) {
     });

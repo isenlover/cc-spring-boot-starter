@@ -34,6 +34,11 @@ public enum NimUrl {
    * 创建群组(高级)
    */
   CREATE_TEAM("https://api.netease.im/nimserver/team/create.action"),
+
+  /**
+   * 拉人入群
+   */
+  JOIN_TEAM("https://api.netease.im/nimserver/team/add.action"),
   ;
 
   private final String description;
