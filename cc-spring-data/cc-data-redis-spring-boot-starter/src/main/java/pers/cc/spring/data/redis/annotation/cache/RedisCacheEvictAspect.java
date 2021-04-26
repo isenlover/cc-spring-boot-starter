@@ -30,16 +30,11 @@ public class RedisCacheEvictAspect {
   @After(value = "execution(* *(..)) && @annotation(redisCacheEvict)")
   public void removeRedisCache(JoinPoint joinPoint, RedisCacheEvict redisCacheEvict) {
     List<String> keys;
-    if (CommonUtils.isNotEmpty(redisCacheEvict.key())) {
-      keys = CommonUtils.getCacheKeys(redisCacheEvict.key(), joinPoint);
-      switch (redisCacheEvict.cacheMethod()) {
-        case DELETE:
-          redisService.remove(keys);
-          break;
-        default:
-          redisService.removeKeys(keys);
-          break;
-      }
+    keys = CommonUtils.getCacheKeys(redisCacheEvict.key(), joinPoint);
+    if (redisCacheEvict.cacheMethod() == RedisCacheEvictMethod.DELETE) {
+      redisService.remove(keys);
+    } else {
+      redisService.removeKeys(keys);
     }
   }
 }

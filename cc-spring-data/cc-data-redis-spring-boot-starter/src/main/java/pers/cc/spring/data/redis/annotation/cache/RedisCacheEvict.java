@@ -19,7 +19,7 @@ public @interface RedisCacheEvict {
    * 默认为函数名称
    * 支持SpEL条件语句
    */
-  String[] key() default "";
+  String[] key();
 
   /**
    * 缓存清理方式
