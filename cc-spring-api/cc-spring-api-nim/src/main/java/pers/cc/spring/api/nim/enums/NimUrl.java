@@ -29,6 +29,11 @@ public enum NimUrl {
    * 查询群组聊天记录
    */
   QUERY_TEAM_MSG_HISTORY("https://api.netease.im/nimserver/history/queryTeamMsg.action"),
+
+  /**
+   * 创建群组(高级)
+   */
+  CREATE_TEAM("https://api.netease.im/nimserver/team/create.action"),
   ;
 
   private final String description;

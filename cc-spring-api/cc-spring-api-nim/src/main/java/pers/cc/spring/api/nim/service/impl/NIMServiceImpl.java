@@ -10,6 +10,8 @@ import pers.cc.spring.api.nim.exception.NIMUserCreateException;
 import pers.cc.spring.api.nim.model.NIMUser;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateDTO;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateResp;
+import pers.cc.spring.api.nim.model.team.NIMTeamDTO;
+import pers.cc.spring.api.nim.model.team.vo.NIMTeamVO;
 import pers.cc.spring.api.nim.service.NIMService;
 import pers.cc.spring.api.nim.util.NIMHelper;
 import pers.cc.spring.core.message.Message;
@@ -67,5 +69,10 @@ public class NIMServiceImpl implements NIMService {
       throw new NIMChatroomCreateException();
     }
     return nimHelper.checkResponse(resp, ChatroomCreateResp.class);
+  }
+
+  @Override
+  public Message<NIMTeamVO> createTeam(NIMTeamDTO nimTeamDTO) {
+    return null;
   }
 }

@@ -42,7 +42,7 @@ public @interface JwtSecurityParam {
   String httpHeader() default "Authorization";
 
   /**
-   * Token有效期，秒，默认30天
+   * Token有效期，秒，默认1天
    */
   int expiryTime() default 86400;
 

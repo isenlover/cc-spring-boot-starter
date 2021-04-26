@@ -4,6 +4,8 @@ import pers.cc.spring.api.nim.exception.NIMUserCreateException;
 import pers.cc.spring.api.nim.model.NIMUser;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateDTO;
 import pers.cc.spring.api.nim.model.chatroom.ChatroomCreateResp;
+import pers.cc.spring.api.nim.model.team.NIMTeamDTO;
+import pers.cc.spring.api.nim.model.team.vo.NIMTeamVO;
 import pers.cc.spring.core.message.Message;
 
 /**
@@ -60,4 +62,7 @@ public interface NIMService {
    * @return 聊天室信息
    */
   Message<ChatroomCreateResp> createChatroom(ChatroomCreateDTO chatroomCreateDTO);
+
+  @Deprecated
+  Message<NIMTeamVO> createTeam(NIMTeamDTO nimTeamDTO);
 }

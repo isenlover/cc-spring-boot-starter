@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EnumClassUtils {
 
-  public static List<EnumClassVO> generatorNoSource(List originList, String labelKey) {
+  public static List<EnumClassVO<Void>> generatorNoSource(List originList, String labelKey) {
     return generator(originList, labelKey, "id", null);
   }
 
