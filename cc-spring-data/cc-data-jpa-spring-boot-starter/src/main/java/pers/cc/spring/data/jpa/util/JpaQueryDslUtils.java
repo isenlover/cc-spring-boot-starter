@@ -115,7 +115,7 @@ public class JpaQueryDslUtils {
   public static OrderSpecifier getOrderSpecifier(String value, Expression expression) {
     if (CommonUtils.isNotEmpty(value)) {
       if (value.equals("asc")) {
-        return new OrderSpecifier<>(Order.ASC, expression);
+        return new OrderSpecifier<>(Order.ASC, expression).nullsLast();
       } else {
         return new OrderSpecifier<>(Order.DESC, expression);
       }
@@ -138,11 +138,11 @@ public class JpaQueryDslUtils {
     return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize()).orderBy(orderSpecifier);
   }
 
-  public static OrderSpecifier[] getOrderList(List<OrderSpecifier> orderSpecifierList) {
+  public static OrderSpecifier[] getOrderSpecifierList(List<OrderSpecifier> orderSpecifierList) {
     return orderSpecifierList.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
   }
 
-  public static OrderSpecifier[] getOrderList(OrderSpecifier... orderSpecifierList) {
+  public static OrderSpecifier[] getOrderSpecifierList(OrderSpecifier... orderSpecifierList) {
     if (orderSpecifierList != null && orderSpecifierList.length > 0) {
       return Arrays.stream(orderSpecifierList).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
     }

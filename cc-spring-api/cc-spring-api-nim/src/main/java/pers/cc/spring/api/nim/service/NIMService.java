@@ -36,6 +36,17 @@ public interface NIMService {
    */
   Message<NIMUser> createNIMUser(String accid, String name);
 
+
+  /**
+   * 修改用户昵称
+   * @param accid
+   * @param name
+   * @return
+   */
+  Message<NIMUser> updateNIMUserNickname(String accid, String name);
+
+
+
   /**
    * 创建云信账号
    *

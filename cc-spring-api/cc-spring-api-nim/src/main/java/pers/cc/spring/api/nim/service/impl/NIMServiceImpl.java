@@ -40,6 +40,22 @@ public class NIMServiceImpl implements NIMService {
     return createNIMUser(accid, name, null);
   }
 
+  @Override
+  public Message<NIMUser> updateNIMUserNickname(String accid, String name) {
+    String resp;
+    try {
+      NIMUser nimUser = new NIMUser();
+      nimUser.setAccid(accid);
+      nimUser.setName(name);
+      resp = HttpUtils.httpsPost(NimUrl.UPDATE_USER.getDescription()
+          , HttpUtils.getUrlParamsByObject(nimUser)
+          , nimHelper.getHttpHeaders());
+    } catch (Exception e) {
+      throw new NIMUserCreateException();
+    }
+    return nimHelper.checkResponse(resp, NIMUser.class);
+  }
+
   public Message<NIMUser> createNIMUser(String accid, String name, String token) throws NIMUserCreateException {
     NIMUser nimUser = new NIMUser();
     nimUser.setAccid(accid);

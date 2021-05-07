@@ -10,6 +10,8 @@ public enum NimUrl {
    */
   CREATE_USER("https://api.netease.im/nimserver/user/create.action"),
 
+  UPDATE_USER("https://api.netease.im/nimserver/user/updateUinfo.action"),
+
   /**
    * 创建聊天室
    */

@@ -83,31 +83,23 @@ public class MathUtils {
   }
 
   public static double getDouble(int x, int y, int place) {
-    return getDouble((double) x / (y * 1.0), place);
+    return getDouble((double) x / Math.max(1, y), place);
   }
 
   public static double getDouble(double x, double y, int place) {
-    return getDouble(x / (y * 1.0), place);
+    return getDouble(x / Math.max(1, y), place);
   }
 
   public static double getDouble(double x, int y, int place) {
-    return getDouble(x / (y * 1.0), place);
+    return getDouble(x / Math.max(1, y), place);
   }
 
-  public static double getPercent(int element, int denominator, int place) {
-    return getDouble((double) element / denominator, place);
-  }
-
-  public static double getPercent(int element, double denominator, int place) {
-    return getDouble((double) element / denominator, place);
-  }
-
-  public static double getPercent(double element, double denominator, int place) {
-    return getDouble(element / denominator, place);
-  }
-
-  public static double getPercent(double element, int denominator, int place) {
-    return getDouble(element / denominator, place);
+  public static double getPercent(Object x, Object y, int place) {
+    long yValue = Long.parseLong(String.valueOf(y));
+    if (yValue == 0) {
+      yValue = 1;
+    }
+    return getDouble(Long.parseLong(String.valueOf(x)) * 100.0 / yValue, place);
   }
 
   /**
