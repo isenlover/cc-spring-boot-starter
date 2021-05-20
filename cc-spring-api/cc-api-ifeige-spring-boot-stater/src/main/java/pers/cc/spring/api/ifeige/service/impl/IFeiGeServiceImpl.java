@@ -12,12 +12,12 @@ import pers.cc.spring.api.ifeige.service.IFeiGeService;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.http.HttpUtils;
-import pers.cc.spring.core.util.other.DateUtils;
+import pers.cc.spring.core.util.date.DateUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static pers.cc.spring.core.util.other.DateUtils.dateTimeFormat;
+import static pers.cc.spring.core.util.date.DateUtils.dateTimeFormat;
 
 /**
  * @author chengce

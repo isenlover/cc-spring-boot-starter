@@ -11,7 +11,7 @@ import pers.cc.spring.api.wechat.model.js.WxJsConfigParamVO;
 import pers.cc.spring.api.wechat.service.WechatSignService;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.other.ClassUtils;
-import pers.cc.spring.core.util.other.DateUtils;
+import pers.cc.spring.core.util.date.DateUtils;
 import pers.cc.spring.core.util.other.MathUtils;
 import pers.cc.spring.core.util.xml.JdomXmlUtils;
 

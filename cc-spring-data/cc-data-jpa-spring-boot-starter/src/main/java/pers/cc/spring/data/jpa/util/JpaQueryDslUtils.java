@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import pers.cc.spring.core.util.CommonUtils;
 import pers.cc.spring.core.util.database.DatabaseUtils;
-import pers.cc.spring.core.util.other.DateUtils;
+import pers.cc.spring.core.util.date.DateUtils;
 import pers.cc.spring.data.jpa.page.PageRequest;
 
 import java.util.*;

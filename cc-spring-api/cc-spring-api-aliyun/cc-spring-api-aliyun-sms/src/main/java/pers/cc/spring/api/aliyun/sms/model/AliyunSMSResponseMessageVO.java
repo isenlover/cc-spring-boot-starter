@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pers.cc.spring.core.util.other.DateUtils;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * 阿里云短信基础类

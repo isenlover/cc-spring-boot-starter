@@ -20,7 +20,7 @@ import pers.cc.spring.api.wechat.util.WechatUtil;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.util.file.QRUtils;
 import pers.cc.spring.core.util.other.ClassUtils;
-import pers.cc.spring.core.util.other.DateUtils;
+import pers.cc.spring.core.util.date.DateUtils;
 import pers.cc.spring.core.util.other.MathUtils;
 
 import java.io.File;

@@ -1,6 +1,7 @@
-package pers.cc.spring.core.util.other;
+package pers.cc.spring.core.util.date;
 
 import pers.cc.spring.core.exception.BaseRuntimeException;
+import pers.cc.spring.core.util.other.ClassUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,10 +10,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoField;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 日期工具类
@@ -30,6 +30,7 @@ public class DateUtils {
   /**
    * 从当前时间获得
    * 本周周一
+   *
    * @return
    */
   public static LocalDate getMonday() {
@@ -441,5 +442,35 @@ public class DateUtils {
 
   public static Date toDate(LocalDate localDate) {
     return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  }
+
+  public static String getFormatDate(DateTimeType dateTimeType, Date date) {
+    if (dateTimeType == null) {
+      return DateUtils.getString(date);
+    }
+    if (dateTimeType.equals(DateTimeType.YEAR)) {
+      return DateUtils.getString(date, "MM");
+    } else if (dateTimeType.equals(DateTimeType.DAY)) {
+      return DateUtils.getString(date, "HH");
+    } else {
+      return DateUtils.getString(date);
+    }
+  }
+
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, String dateKey) {
+    return list.stream()
+        .sorted(Comparator.comparingLong(object -> {
+          Date value = ClassUtils.getValue(object, dateKey);
+          return value.getTime();
+        }))
+        .collect(Collectors.groupingBy(
+            object -> getFormatDate(dateTimeType, ClassUtils.getValue(object, dateKey)),
+            LinkedHashMap::new,
+            Collectors.toCollection(ArrayList::new)
+        ));
+  }
+
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType) {
+    return getGroupDate(list, dateTimeType, "createTime");
   }
 }
