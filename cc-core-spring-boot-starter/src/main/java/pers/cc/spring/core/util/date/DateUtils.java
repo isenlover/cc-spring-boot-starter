@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -457,20 +458,33 @@ public class DateUtils {
     }
   }
 
-  public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, String dateKey) {
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, String dateKey, boolean asc) {
+    Collector<T, ?, LinkedHashMap<String, List<T>>> grouping = Collectors.groupingBy(
+        object -> getFormatDate(dateTimeType, ClassUtils.getValue(object, dateKey)),
+        LinkedHashMap::new,
+        Collectors.toCollection(ArrayList::new)
+    );
+    if (asc) {
+      return list.stream()
+          .sorted(Comparator.comparingLong(object -> {
+            Date value = ClassUtils.getValue(object, dateKey);
+            return value.getTime();
+          }))
+          .collect(grouping);
+    }
     return list.stream()
         .sorted(Comparator.comparingLong(object -> {
           Date value = ClassUtils.getValue(object, dateKey);
           return value.getTime();
-        }))
-        .collect(Collectors.groupingBy(
-            object -> getFormatDate(dateTimeType, ClassUtils.getValue(object, dateKey)),
-            LinkedHashMap::new,
-            Collectors.toCollection(ArrayList::new)
-        ));
+        }).reversed())
+        .collect(grouping);
+  }
+
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, boolean asc) {
+    return getGroupDate(list, dateTimeType, "createTime", asc);
   }
 
   public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType) {
-    return getGroupDate(list, dateTimeType, "createTime");
+    return getGroupDate(list, dateTimeType, "createTime", true);
   }
 }
