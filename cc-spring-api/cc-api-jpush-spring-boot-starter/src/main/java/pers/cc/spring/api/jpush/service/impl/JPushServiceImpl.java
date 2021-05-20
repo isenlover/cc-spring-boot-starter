@@ -27,13 +27,13 @@ public class JPushServiceImpl implements JPushService {
   @Autowired
   JPushApiProperties jPushApiProperties;
 
-  public static PushPayload buildPushObject_android_and_ios(String content) {
+  public static PushPayload buildPushObject_android_and_ios(String content, boolean volume) {
 //    Map<String, String> extras = new HashMap<String, String>();
 //    extras.put("test", "https://community.jiguang.cn/push");
     JsonObject sound = new JsonObject();
     sound.add("critical", new JsonPrimitive(1));
     sound.add("name", new JsonPrimitive("default"));
-    sound.add("volume", new JsonPrimitive(1));
+    sound.add("volume", volume ? new JsonPrimitive(1) : new JsonPrimitive(0));
     return PushPayload.newBuilder()
         .setPlatform(Platform.android_ios())
         .setAudience(Audience.newBuilder()
@@ -56,6 +56,11 @@ public class JPushServiceImpl implements JPushService {
 
   @Override
   public void pushMessage(String message) {
+    pushMessage(message, true);
+  }
+
+  @Override
+  public void pushMessage(String message, boolean volume) {
     ClientConfig clientConfig = ClientConfig.getInstance();
     final JPushClient jpushClient = new JPushClient(jPushApiProperties.getSecret(), jPushApiProperties.getAppKey(), null, clientConfig);
 //        String authCode = ServiceHelper.getBasicAuthorization(APP_KEY, MASTER_SECRET);
@@ -66,7 +71,7 @@ public class JPushServiceImpl implements JPushService {
 //        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, clientConfig);
 //        NettyHttpClient httpClient =new NettyHttpClient(authCode, null, clientConfig);
 //        jpushClient.getPushClient().setHttpClient(httpClient);
-    final PushPayload payload = buildPushObject_android_and_ios(message);
+    final PushPayload payload = buildPushObject_android_and_ios(message, volume);
 //        // For push, all you need do is to build PushPayload object.
 //        PushPayload payload = buildPushObject_all_alias_alert();
     try {

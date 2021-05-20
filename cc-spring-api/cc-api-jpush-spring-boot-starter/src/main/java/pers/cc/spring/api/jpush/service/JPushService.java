@@ -7,4 +7,7 @@ package pers.cc.spring.api.jpush.service;
 public interface JPushService {
 
   void pushMessage(String message);
+
+  @Deprecated
+  void pushMessage(String message, boolean volume);
 }
