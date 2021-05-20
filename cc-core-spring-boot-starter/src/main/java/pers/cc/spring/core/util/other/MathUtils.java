@@ -237,19 +237,19 @@ public class MathUtils {
    * @param list
    * @return
    */
-  public static StandardDeviationResult getStandardDeviation(List<Double> list) {
+  public static <T> StandardDeviationResult getStandardDeviation(List<T> list) {
     StandardDeviationResult result = new StandardDeviationResult();
-    double average = list.stream().mapToDouble(value -> value).average().orElse(-1);
+    double average = list.stream().mapToDouble(value -> Double.parseDouble(value.toString())).average().orElse(-1);
     result.setAverage(average);
-    double standardDeviation = Math.sqrt(list.stream().mapToDouble(value -> Math.pow(value - average, 2)).sum() / list.size());
+    double standardDeviation = Math.sqrt(list.stream().mapToDouble(value -> Math.pow(Double.parseDouble(value.toString()) - average, 2)).sum() / list.size());
     result.setStandardDeviation(standardDeviation);
     return result;
   }
 
-  public static StandardDeviationResult removeAbnormalValue(List<Double> list) {
+  public static <T> StandardDeviationResult removeAbnormalValue(List<T> list) {
     StandardDeviationResult result = getStandardDeviation(list);
-    list.removeIf(value -> Math.abs(value - result.getAverage()) > result.getStandardDeviation() * 2);
-    return result;
+    list.removeIf(value -> Math.abs(Double.parseDouble(value.toString()) - result.getAverage()) > result.getStandardDeviation() * 2);
+    return getStandardDeviation(list);
   }
 
   public static double getAverage(List<Double> list) {
