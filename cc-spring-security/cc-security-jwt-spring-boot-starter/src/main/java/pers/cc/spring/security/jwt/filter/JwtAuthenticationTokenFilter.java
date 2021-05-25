@@ -121,16 +121,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   @Deprecated
   private void setResponse(HttpServletResponse response, HttpServletRequest httpServletRequest) {
     String origin = httpServletRequest.getHeader("Origin");
-    AtomicReference<String> allowOrigin = new AtomicReference<>("*");
-    if (origin != null) {
-      jwtSecurityParamBean.getAllowOrigins().stream().filter(origin::equals).findFirst().ifPresent(allowOrigin::set);
-    } else {
-      if (!coreProperties.isDebug()) {
-        allowOrigin.set("");
-      } else {
-        allowOrigin.set("*");
+    AtomicReference<String> allowOrigin = new AtomicReference<>();
+    if (!coreProperties.isDebug()) {
+      allowOrigin.set("null");
+      if (origin != null) {
+        jwtSecurityParamBean.getAllowOrigins().stream().filter(origin::equals).findFirst().ifPresent(allowOrigin::set);
       }
+    } else {
+      allowOrigin.set("*");
     }
+    log.info("跨域地址：" + allowOrigin.get());
     response.setHeader("Access-Control-Allow-Origin", allowOrigin.get());
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
