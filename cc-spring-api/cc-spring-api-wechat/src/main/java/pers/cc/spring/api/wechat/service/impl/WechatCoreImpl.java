@@ -84,10 +84,10 @@ public class WechatCoreImpl implements WechatCoreService {
     String response;
     try {
       response = HttpUtils.httpsGet(requestUrl);
-      cLog.info("initAccessToken: " + response);
+      log.info("initAccessToken: " + response);
       AccessTokenBo.setAccessTokenBo(JSON.parseObject(response, AccessTokenBo.class));
     } catch (Exception e) {
-      cLog.info("initAccessToken-error: " + e.getLocalizedMessage());
+      log.error("initAccessToken-error: " + e.getLocalizedMessage());
       e.printStackTrace();
     }
   }

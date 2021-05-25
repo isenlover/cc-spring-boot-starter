@@ -130,7 +130,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     } else {
       allowOrigin.set("*");
     }
-    log.info("跨域地址：" + allowOrigin.get());
+//    log.info("跨域地址：" + allowOrigin.get());
     response.setHeader("Access-Control-Allow-Origin", allowOrigin.get());
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
