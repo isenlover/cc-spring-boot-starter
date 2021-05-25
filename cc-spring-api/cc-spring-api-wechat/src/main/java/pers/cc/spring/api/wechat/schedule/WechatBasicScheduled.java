@@ -28,7 +28,7 @@ public class WechatBasicScheduled {
   WechatJsService wechatJsService;
 
   /**
-   * 每天50分钟执行一次
+   * 每10分钟执行一次
    */
 //    @Scheduled(cron = "0 0 */1 * * ?")
   @Scheduled(fixedDelay = 600000)

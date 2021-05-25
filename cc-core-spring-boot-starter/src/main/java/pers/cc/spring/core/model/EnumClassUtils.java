@@ -5,6 +5,7 @@ import pers.cc.spring.core.util.other.ClassUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author chengce
@@ -34,7 +35,11 @@ public class EnumClassUtils {
   }
 
   public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, String valueKey, String childrenKey, boolean hasData) {
-    return originList.stream().map(t -> {
+    return generator(originList, labelKey, valueKey, childrenKey, hasData, true);
+  }
+
+  public static <T> List<EnumClassVO<T>> generator(List<T> originList, String labelKey, String valueKey, String childrenKey, boolean hasData, boolean distinct) {
+    Stream<EnumClassVO<T>> stream = originList.stream().map(t -> {
       EnumClassVO.EnumClassVOBuilder<T> builder = EnumClassVO.<T>builder()
           .label(ClassUtils.getValue(t, labelKey))
           .value(ClassUtils.getValue(t, valueKey));
@@ -48,10 +53,14 @@ public class EnumClassUtils {
         }
       }
       return builder.build();
-    })
-        .collect(Collectors.collectingAndThen(
-            Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EnumClassVO::getValue))),
-            ArrayList::new
-        ));
+    });
+    if (distinct) {
+      return stream
+          .collect(Collectors.collectingAndThen(
+              Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EnumClassVO::getValue))),
+              ArrayList::new
+          ));
+    }
+    return stream.collect(Collectors.toList());
   }
 }
