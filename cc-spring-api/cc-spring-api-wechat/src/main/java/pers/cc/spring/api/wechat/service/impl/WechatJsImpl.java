@@ -9,13 +9,13 @@ import pers.cc.spring.api.wechat.annotation.EnableWechatOfficialAccount;
 import pers.cc.spring.api.wechat.bean.WechatInformation;
 import pers.cc.spring.api.wechat.model.js.WxJsConfigParamVO;
 import pers.cc.spring.api.wechat.model.js.WxJsRequestParamDTO;
-import pers.cc.spring.api.wechat.model.js.oauth.WxJsOAuthDTO;
 import pers.cc.spring.api.wechat.model.js.oauth.WxJsOAuthAccessToken;
+import pers.cc.spring.api.wechat.model.js.oauth.WxJsOAuthDTO;
 import pers.cc.spring.api.wechat.model.js.oauth.WxJsOAuthUserInformation;
-import pers.cc.spring.api.wechat.model.other.AccessTokenBo;
 import pers.cc.spring.api.wechat.model.other.JSTicketBo;
 import pers.cc.spring.api.wechat.service.WechatJsService;
 import pers.cc.spring.api.wechat.service.WechatSignService;
+import pers.cc.spring.api.wechat.token.WechatTokenManager;
 import pers.cc.spring.api.wechat.util.WechatUtil;
 import pers.cc.spring.core.exception.BaseRuntimeException;
 import pers.cc.spring.core.message.Message;
@@ -47,6 +47,9 @@ public class WechatJsImpl implements WechatJsService {
   @Autowired
   CLog cLog;
 
+  @Autowired
+  WechatTokenManager wechatTokenManager;
+
   @Value("${wechat.url.oauth.js}")
   private String url_js_oauth;
 
@@ -61,8 +64,8 @@ public class WechatJsImpl implements WechatJsService {
 
   @Override
   public void getJSTicket() {
-    if (CommonUtils.isNotEmpty(AccessTokenBo.getInstance().getAccess_token())) {
-      String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(url_js_ticket);
+    if (CommonUtils.isNotEmpty(wechatTokenManager.getToken())) {
+      String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(url_js_ticket);
       Message<JSTicketBo> message = WechatUtil.httpsGetWechat(requestUrl, JSTicketBo.class);
       cLog.info("getJSTicket: " + message.toString());
       if (CommonUtils.isNotEmpty(message.getData())) {

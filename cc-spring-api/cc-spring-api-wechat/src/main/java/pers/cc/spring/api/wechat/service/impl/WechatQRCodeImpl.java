@@ -1,6 +1,8 @@
 package pers.cc.spring.api.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import pers.cc.spring.api.wechat.model.account.QRCode;
 import pers.cc.spring.api.wechat.model.account.QRCodeParam;
 import pers.cc.spring.api.wechat.model.account.QRCodeResp;
 import pers.cc.spring.api.wechat.service.WechatQRCodeService;
+import pers.cc.spring.api.wechat.token.WechatTokenManager;
 import pers.cc.spring.api.wechat.util.WechatUtil;
 import pers.cc.spring.core.message.Message;
 
@@ -24,8 +27,12 @@ import java.net.URLEncoder;
  */
 @Primary
 @Service
+@Slf4j
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatQRCodeImpl implements WechatQRCodeService {
+
+  @Autowired
+  WechatTokenManager wechatTokenManager;
 
 
   @Override
@@ -33,7 +40,8 @@ public class WechatQRCodeImpl implements WechatQRCodeService {
     QRCode qrCode = new QRCode();
     qrCode.setAction_name(params.getActionName().name());
     qrCode.setAction_info(params);
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatQRCodeUrl.getUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatQRCodeUrl.getUrl.getUrl());
+    log.info("qrCode requestUrl: " + requestUrl);
     return WechatUtil.httpsPostWechat(requestUrl, JSON.toJSONString(qrCode), QRCodeResp.class);
   }
 
@@ -56,6 +64,7 @@ public class WechatQRCodeImpl implements WechatQRCodeService {
 //        return httpMessage.getData();
 //      }
     }
+    log.info("qrCode Get Error，" + message.getMessage());
     return null;
   }
 }

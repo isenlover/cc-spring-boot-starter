@@ -1,6 +1,7 @@
 package pers.cc.spring.api.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import pers.cc.spring.api.wechat.annotation.EnableWechatOfficialAccount;
@@ -8,6 +9,7 @@ import pers.cc.spring.api.wechat.enums.url.WechatTagUrl;
 import pers.cc.spring.api.wechat.model.other.WxBaseResponse;
 import pers.cc.spring.api.wechat.model.user.*;
 import pers.cc.spring.api.wechat.service.WechatUserTagService;
+import pers.cc.spring.api.wechat.token.WechatTokenManager;
 import pers.cc.spring.api.wechat.util.WechatUtil;
 import pers.cc.spring.core.message.Message;
 import pers.cc.spring.core.util.CommonUtils;
@@ -23,11 +25,14 @@ import java.util.List;
 @Service
 @ConditionalOnBean(annotation = EnableWechatOfficialAccount.class)
 public class WechatUserTagImpl extends WechatUserTagAbstract implements WechatUserTagService {
+  
+  @Autowired
+  WechatTokenManager wechatTokenManager;
 
   public Message<TagMessage> createTag(String tagName) {
     Message<TagMessage> httpMessage = new Message<>();
     TagMessage tagMessage = new TagMessage();
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatTagUrl.createUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatTagUrl.createUrl.getUrl());
 
     tagMessage.setTag(new Tag(tagName));
     try {
@@ -45,7 +50,7 @@ public class WechatUserTagImpl extends WechatUserTagAbstract implements WechatUs
   public Message<List<Tag>> getTags() {
     Message<List<Tag>> httpMessage = new Message<>();
     TagListMessage tagListMessage;
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatTagUrl.getUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatTagUrl.getUrl.getUrl());
 
     try {
       String response = HttpUtils.httpsGet(requestUrl);
@@ -68,7 +73,7 @@ public class WechatUserTagImpl extends WechatUserTagAbstract implements WechatUs
   public Message<Integer> editTag(Tag tag) {
     Message<Integer> httpMessage = new Message<>();
     httpMessage.setData(tag.getId());
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatTagUrl.editUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatTagUrl.editUrl.getUrl());
 
     TagMessage tagMessage = new TagMessage();
     tagMessage.setTag(tag);
@@ -93,7 +98,7 @@ public class WechatUserTagImpl extends WechatUserTagAbstract implements WechatUs
   public Message<Integer> deleteTag(int tagID) {
     Message<Integer> httpMessage = new Message<>();
     TagMessage tagMessage = new TagMessage();
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatTagUrl.deleteUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatTagUrl.deleteUrl.getUrl());
 
     tagMessage.setTag(new Tag(tagID));
     try {
@@ -123,7 +128,7 @@ public class WechatUserTagImpl extends WechatUserTagAbstract implements WechatUs
     if (CommonUtils.isNotEmpty(next_openid)) {
       userTagRequest.setNext_openid(next_openid);
     }
-    String requestUrl = WechatUtil.getRealUrlReplaceAccessToken(WechatTagUrl.getFansListTagUrl.getUrl());
+    String requestUrl = wechatTokenManager.getRealUrlReplaceAccessToken(WechatTagUrl.getFansListTagUrl.getUrl());
     try {
       String response = HttpUtils.httpsPost(requestUrl, JSON.toJSONString(userTagRequest));
       userTagResponseMessage = JSON.parseObject(response, UserTagResponseMessage.class);

@@ -2,7 +2,6 @@ package pers.cc.spring.api.wechat.util;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import pers.cc.spring.api.wechat.model.other.AccessTokenBo;
 import pers.cc.spring.api.wechat.model.other.WxBaseResponse;
 import pers.cc.spring.api.wechat.model.pay.response.WxPayMessage;
 import pers.cc.spring.core.message.Message;
@@ -22,15 +21,15 @@ import java.util.Map;
 @Slf4j
 public class WechatUtil {
 
-  /**
-   * 去掉Url中的ACCESS_TOKEN
-   *
-   * @param url url
-   * @return realBet url
-   */
-  public static String getRealUrlReplaceAccessToken(String url) {
-    return url.replace("ACCESS_TOKEN", AccessTokenBo.getInstance().getAccess_token());
-  }
+//  /**
+//   * 去掉Url中的ACCESS_TOKEN
+//   *
+//   * @param url url
+//   * @return realBet url
+//   */
+//  public static String getRealUrlReplaceAccessToken(String url) {
+//    return url.replace("ACCESS_TOKEN", AccessTokenBo.getInstance().getAccess_token());
+//  }
 
   /**
    * 检查微信请求是否成功
@@ -89,11 +88,13 @@ public class WechatUtil {
     Message<T> httpMessage = new Message<>();
     try {
       String response = HttpUtils.httpsRequest(requestUrl, method, params);
+      log.info("wechat response：" + response);
       T data = JSON.parseObject(response, clazz);
       if (WechatUtil.checkRequest(httpMessage, data)) {
         httpMessage.setData(data);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       httpMessage.setCode(WechatMessageCode.BAD_REQUEST_WECHAT_HTTP_ANALYSIS.getCode());
       httpMessage.setMessage(WechatMessageCode.BAD_REQUEST_WECHAT_HTTP_ANALYSIS.getMessage());
       return httpMessage;

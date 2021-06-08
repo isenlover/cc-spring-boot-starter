@@ -11,6 +11,7 @@ import pers.cc.spring.api.wechat.model.other.AccessTokenBo;
 import pers.cc.spring.api.wechat.model.other.AuthenticationBo;
 import pers.cc.spring.api.wechat.service.WechatCoreService;
 import pers.cc.spring.api.wechat.service.WechatSignService;
+import pers.cc.spring.api.wechat.token.WechatTokenManager;
 import pers.cc.spring.core.util.CLog;
 import pers.cc.spring.core.util.http.HttpUtils;
 
@@ -32,6 +33,9 @@ public class WechatCoreImpl implements WechatCoreService {
 
   @Autowired
   CLog cLog;
+
+  @Autowired
+  WechatTokenManager wechatTokenManager;
 
   public enum CCWechat {
 
@@ -85,7 +89,8 @@ public class WechatCoreImpl implements WechatCoreService {
     try {
       response = HttpUtils.httpsGet(requestUrl);
       log.info("initAccessToken: " + response);
-      AccessTokenBo.setAccessTokenBo(JSON.parseObject(response, AccessTokenBo.class));
+      AccessTokenBo accessTokenBo = JSON.parseObject(response, AccessTokenBo.class);
+      wechatTokenManager.saveToken(accessTokenBo.getAccess_token());
     } catch (Exception e) {
       log.error("initAccessToken-error: " + e.getLocalizedMessage());
       e.printStackTrace();
