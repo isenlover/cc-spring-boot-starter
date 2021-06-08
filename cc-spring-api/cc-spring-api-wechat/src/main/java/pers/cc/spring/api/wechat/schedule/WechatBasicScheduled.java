@@ -31,7 +31,8 @@ public class WechatBasicScheduled {
    * 每10分钟执行一次
    */
 //    @Scheduled(cron = "0 0 */1 * * ?")
-  @Scheduled(fixedDelay = 600000)
+//  @Scheduled(fixedDelay = 600000)
+  @Scheduled(fixedDelay = 180000)
 //    @Scheduled(cron = "0 0/30 * * * ?")
   public void executeUploadTaskForToken() {
     baseService.initAccessToken();
