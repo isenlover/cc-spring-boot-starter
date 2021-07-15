@@ -134,7 +134,7 @@ public class JpaQueryDslUtils {
     return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize());
   }
 
-  public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier orderSpecifier) {
+  public static <T> JPAQuery<T> getPageResult(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier... orderSpecifier) {
     return jpaQuery.offset(pageRequest.getOffset()).limit(pageRequest.getPageSize()).orderBy(orderSpecifier);
   }
 
