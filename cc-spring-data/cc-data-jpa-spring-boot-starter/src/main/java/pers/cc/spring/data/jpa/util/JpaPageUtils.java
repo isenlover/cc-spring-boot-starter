@@ -39,7 +39,7 @@ public class JpaPageUtils {
   }
 
 
-  public static <T> PageResults<T> convertToPageData(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier orderSpecifier) {
+  public static <T> PageResults<T> convertToPageData(JPAQuery<T> jpaQuery, PageRequest pageRequest, OrderSpecifier... orderSpecifier) {
     QueryResults<T> queryResults = JpaQueryDslUtils.getPageResult(jpaQuery, pageRequest, orderSpecifier).fetchResults();
     return PageResults.of(queryResults.getOffset(), queryResults.getLimit(), queryResults.getTotal(),
         queryResults.getResults());
