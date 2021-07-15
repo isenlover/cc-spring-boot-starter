@@ -118,6 +118,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
    *
    * @deprecated 此跨域方式存在缺陷：websocket跨域不能解决
    */
+  // TODO 2021/6/16: 跨域没生效，一直返回 *
   @Deprecated
   private void setResponse(HttpServletResponse response, HttpServletRequest httpServletRequest) {
     String origin = httpServletRequest.getHeader("Origin");
