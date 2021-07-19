@@ -193,6 +193,37 @@ public class DateUtils {
     return format.format(calendar.getTime());
   }
 
+  /**
+   * 获取当月第一天
+   *
+   * @return 当月第一天
+   */
+  public static Date getCurrentMonthFirstDate() {
+    // 获取前月的第一天
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MONTH, 0);
+    calendar.set(Calendar.DAY_OF_MONTH, 1);
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    return calendar.getTime();
+  }
+
+  /**
+   * 获取某月第一天
+   *
+   * @return 第一天
+   */
+  public static Date getMonthOfFirstDate(int month) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MONTH, month);
+    calendar.set(Calendar.DAY_OF_MONTH, 1);
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    return calendar.getTime();
+  }
+
 
   /**
    * 获取当月最后一天

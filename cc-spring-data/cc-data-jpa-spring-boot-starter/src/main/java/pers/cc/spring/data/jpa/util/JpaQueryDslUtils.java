@@ -26,6 +26,13 @@ public class JpaQueryDslUtils {
     return enumPath.eq(value);
   }
 
+  public static BooleanExpression getEnumInExpression(EnumPath enumPath, Object[] value) {
+    if (CommonUtils.isEmpty(value) || value.length == 0) {
+      return null;
+    }
+    return enumPath.in(value);
+  }
+
   public static BooleanExpression getStringEqualExpression(StringPath stringPath, String value) {
     if (CommonUtils.isEmpty(value)) {
       return null;
@@ -62,6 +69,14 @@ public class JpaQueryDslUtils {
     return dateTimePath.between(new Date(split[0]), new Date(split[1]));
   }
 
+  public static BooleanExpression getNumberRangeExpression(NumberPath numberPath, String text) {
+    if (CommonUtils.isEmpty(text) || !text.contains("-")) {
+      return null;
+    }
+    Long[] split = Arrays.stream(text.split("-")).map(Long::valueOf).toArray(Long[]::new);
+    return numberPath.between(split[0], split[1]);
+  }
+
   public static BooleanExpression getDateTimeBetweenExpression(Date date, DateTimePath fromDateTimePath, DateTimePath toDateTimePath) {
     if (CommonUtils.isEmpty(date, fromDateTimePath, toDateTimePath)) {
       return null;
@@ -86,6 +101,13 @@ public class JpaQueryDslUtils {
 
   public static BooleanExpression getBooleanEqualExpression(BooleanPath booleanPath, Boolean value) {
     if (CommonUtils.isEmpty(value) || Boolean.FALSE.equals(value)) {
+      return null;
+    }
+    return booleanPath.eq(value);
+  }
+
+  public static BooleanExpression getBooleanEqualExactExpression(BooleanPath booleanPath, Boolean value) {
+    if (CommonUtils.isEmpty(value)) {
       return null;
     }
     return booleanPath.eq(value);
@@ -147,6 +169,17 @@ public class JpaQueryDslUtils {
       return Arrays.stream(orderSpecifierList).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
     }
     return new OrderSpecifier[]{};
+  }
+
+  public static OrderSpecifier[] getDefaultOrderSpecifierList(OrderSpecifier defaultOrderSpecifier, OrderSpecifier... orderSpecifierList) {
+    if (orderSpecifierList != null && orderSpecifierList.length > 0) {
+      List<OrderSpecifier> list = Arrays.stream(orderSpecifierList).filter(Objects::nonNull).collect(Collectors.toList());
+      if (CommonUtils.isEmpty(list)) {
+        return new OrderSpecifier[]{defaultOrderSpecifier};
+      }
+      return list.toArray(new OrderSpecifier[]{});
+    }
+    return new OrderSpecifier[]{defaultOrderSpecifier};
   }
 
   /**
