@@ -14,7 +14,7 @@ public class RegExpUtils {
 
   private String regExp;
 
-  public static final String PATTERN_MOBILE_CHINA_MAINLAND = "^1[3|5|6|7|8|9]\\d{9}$";
+  public static final String PATTERN_MOBILE_CHINA_MAINLAND = "^1[2|3|4|5|6|7|8|9]\\d{9}$";
 
   public static final String PATTERN_EMAIL = "\\w+@\\w+.\\w+";
 
