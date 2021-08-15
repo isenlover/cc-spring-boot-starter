@@ -54,6 +54,8 @@ public interface RedisService {
    */
   <E> E getValue(String key);
 
+  <E> E getValue(String key, E defaultValue);
+
   /**
    * 获取 jpa的queryResult
    *

@@ -185,6 +185,8 @@ public class CommonUtils {
           paramValuesBuilder.append(paramValue).append(",");
         } else if (paramValue instanceof Date) {
           paramValuesBuilder.append(((Date) paramValue).getTime()).append(",");
+        } else if (paramValue instanceof List) {
+          paramValuesBuilder.append(paramValue.hashCode()).append(",");
         } else if (paramValue != null) {
           paramValuesBuilder.append(paramValue.toString()).append(",");
         } else {

@@ -12,4 +12,6 @@ public enum DateTimeType {
   WEEK,
 
   DAY,
+
+  HOUR,
 }

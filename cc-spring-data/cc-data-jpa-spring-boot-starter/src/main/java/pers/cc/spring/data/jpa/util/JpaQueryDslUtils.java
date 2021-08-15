@@ -127,6 +127,23 @@ public class JpaQueryDslUtils {
     return stringPath.like(DatabaseUtils.likeAll(value));
   }
 
+  /**
+   * @param stringPath
+   * @param value
+   * @param equalFlag  当这个标志出现时，精确搜索
+   * @return
+   */
+  public static BooleanExpression getStringLikeOrEqualExpression(StringPath stringPath, String value, String equalFlag) {
+    if (CommonUtils.isEmpty(value)) {
+      return null;
+    }
+    return value.contains(equalFlag) ? stringPath.eq(value.replace(equalFlag, "")) : stringPath.like(DatabaseUtils.likeAll(value));
+  }
+
+  public static BooleanExpression getStringLikeOrEqualExpression(StringPath stringPath, String value) {
+    return getStringLikeOrEqualExpression(stringPath, value, "-only");
+  }
+
   public static BooleanExpression getStringInExpression(StringPath stringPath, String[] value) {
     if (CommonUtils.isEmpty(value)) {
       return null;

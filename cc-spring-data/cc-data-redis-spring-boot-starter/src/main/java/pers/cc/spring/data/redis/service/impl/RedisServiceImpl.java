@@ -77,6 +77,14 @@ public class RedisServiceImpl implements RedisService {
   }
 
   @Override
+  public <E> E getValue(String key, E defaultValue) {
+    if (exist(key)) {
+      return getValue(key);
+    }
+    return defaultValue;
+  }
+
+  @Override
   public <T> QueryResults<T> getQueryResult(String key) {
     return JSON.parseObject(getValue(key), QueryResults.class);
   }

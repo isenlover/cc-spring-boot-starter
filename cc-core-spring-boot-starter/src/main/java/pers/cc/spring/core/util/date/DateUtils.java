@@ -495,6 +495,13 @@ public class DateUtils {
         LinkedHashMap::new,
         Collectors.toCollection(ArrayList::new)
     );
+    return getGroupDate(list, dateKey, asc, grouping);
+  }
+
+  private static <T> LinkedHashMap<String, List<T>> getGroupDate(List<T> list,
+                                                                 String dateKey,
+                                                                 boolean asc,
+                                                                 Collector<T, ?, LinkedHashMap<String, List<T>>> grouping) {
     if (asc) {
       return list.stream()
           .sorted(Comparator.comparingLong(object -> {
@@ -511,11 +518,24 @@ public class DateUtils {
         .collect(grouping);
   }
 
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, String format, String dateKey, boolean asc) {
+    Collector<T, ?, LinkedHashMap<String, List<T>>> grouping = Collectors.groupingBy(
+        object -> DateUtils.getString(ClassUtils.getValue(object, dateKey), format),
+        LinkedHashMap::new,
+        Collectors.toCollection(ArrayList::new)
+    );
+    return getGroupDate(list, dateKey, asc, grouping);
+  }
+
   public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, boolean asc) {
     return getGroupDate(list, dateTimeType, "createTime", asc);
   }
 
   public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType) {
     return getGroupDate(list, dateTimeType, "createTime", true);
+  }
+
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, String format) {
+    return getGroupDate(list, format, "createTime", true);
   }
 }

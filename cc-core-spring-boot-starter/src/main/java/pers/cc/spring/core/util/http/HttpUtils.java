@@ -51,8 +51,8 @@ public class HttpUtils {
     httpURLConnection.setDoOutput(true);
     httpURLConnection.setDoInput(true);
     httpURLConnection.setUseCaches(false);
-    httpURLConnection.setReadTimeout(10000);
-    httpURLConnection.setConnectTimeout(10000);
+    httpURLConnection.setReadTimeout(30000);
+    httpURLConnection.setConnectTimeout(30000);
     // 设置请求方式（GET/POST）
     httpURLConnection.setRequestMethod(httpMethod.name());
 
