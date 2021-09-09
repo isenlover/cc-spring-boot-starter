@@ -4,6 +4,7 @@ import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import pers.cc.spring.core.exception.PinyinRuntimeException;
+import pers.cc.spring.core.util.CommonUtils;
 
 /**
  * 对 {@link PinyinHelper}的再次封装
@@ -26,6 +27,9 @@ public class PinyinUtils {
 
   public static String toPinyin(String chinese, String separator) {
     try {
+      if (CommonUtils.isEmpty(chinese)) {
+        return null;
+      }
       return PinyinHelper.convertToPinyinString(chinese, separator, PinyinFormat.WITHOUT_TONE);
     } catch (PinyinException e) {
       throw new PinyinRuntimeException(e.getMessage());

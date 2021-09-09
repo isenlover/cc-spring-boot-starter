@@ -527,6 +527,15 @@ public class DateUtils {
     return getGroupDate(list, dateKey, asc, grouping);
   }
 
+  public static <T> Map<String, List<T>> getGroupDate(List<T> list, String format, String dateKey) {
+    Collector<T, ?, LinkedHashMap<String, List<T>>> grouping = Collectors.groupingBy(
+        object -> DateUtils.getString(ClassUtils.getValue(object, dateKey), format),
+        LinkedHashMap::new,
+        Collectors.toCollection(ArrayList::new)
+    );
+    return getGroupDate(list, dateKey, true, grouping);
+  }
+
   public static <T> Map<String, List<T>> getGroupDate(List<T> list, DateTimeType dateTimeType, boolean asc) {
     return getGroupDate(list, dateTimeType, "createTime", asc);
   }

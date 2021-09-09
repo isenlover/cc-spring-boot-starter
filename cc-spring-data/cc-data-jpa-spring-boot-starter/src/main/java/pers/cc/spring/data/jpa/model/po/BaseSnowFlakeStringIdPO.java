@@ -34,7 +34,7 @@ public class BaseSnowFlakeStringIdPO implements Serializable {
   @ApiModelProperty(hidden = true)
   private String id;
 
-  @CreationTimestamp
+//  @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   @Column(columnDefinition = "datetime COMMENT'创建时间'", updatable = false)
   @ApiModelProperty(hidden = true)

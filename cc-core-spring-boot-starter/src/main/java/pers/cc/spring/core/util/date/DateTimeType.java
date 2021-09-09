@@ -14,4 +14,6 @@ public enum DateTimeType {
   DAY,
 
   HOUR,
+
+  ALL,
 }

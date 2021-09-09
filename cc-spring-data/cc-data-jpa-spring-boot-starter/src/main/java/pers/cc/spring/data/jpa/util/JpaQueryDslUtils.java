@@ -26,6 +26,16 @@ public class JpaQueryDslUtils {
     return enumPath.eq(value);
   }
 
+  public static BooleanExpression getEnumExpression(EnumPath enumPath, Object value, Object... defaultValue) {
+    if (CommonUtils.isEmpty(value)) {
+      if (defaultValue != null && defaultValue.length > 0) {
+        return enumPath.in(defaultValue);
+      }
+      return null;
+    }
+    return enumPath.eq(value);
+  }
+
   public static BooleanExpression getEnumInExpression(EnumPath enumPath, Object[] value) {
     if (CommonUtils.isEmpty(value) || value.length == 0) {
       return null;

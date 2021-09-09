@@ -184,6 +184,7 @@ public class ClassUtils {
         PropertyDescriptor tbPropDesc = new PropertyDescriptor(field.getName(), poData.getClass());
         Method methodRead = tbPropDesc.getReadMethod();
         Object invokeValue = methodRead.invoke(poData);
+        if (invokeValue == null) continue;
         if (field.getType().equals(String.class)) {
           if (invokeValue instanceof Integer || invokeValue instanceof Long || invokeValue instanceof Double) {
             methodWrite.invoke(vo, String.valueOf(invokeValue));
