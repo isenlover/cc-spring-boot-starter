@@ -83,6 +83,13 @@ public class BaseRuntimeException extends RuntimeException {
     this.statusCode = 400;
   }
 
+  public BaseRuntimeException(String message, String errCode) {
+    super(message);
+    this.errMsg = message;
+    this.errCode = errCode;
+    this.statusCode = 400;
+  }
+
 
   @Override
   public String getMessage() {

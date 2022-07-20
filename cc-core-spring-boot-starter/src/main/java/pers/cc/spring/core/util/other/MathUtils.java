@@ -69,13 +69,29 @@ public class MathUtils {
    * @return 结果
    */
   public static double getDouble(double data, int place) {
+    if (data == 0) {
+      return 0;
+    }
     // 可能会丢失精度
-    String result = String.format("%." + place + "f", data);
-//        String[] temps = result.split(".");
-//        if (temps.length > 1) {
-//            result = temps[0] + "." + temps[1].substring(0, place);
-//        }
-    return new BigDecimal(result).doubleValue();
+//    String result = String.format("%." + place + "f", data);
+//    String[] temps = result.split("\\.");
+//    if (temps.length > 1) {
+//      result = temps[0] + "." + temps[1].substring(0, place);
+//    }
+    return Double.parseDouble(new BigDecimal(Double.toString(data)).setScale(place, BigDecimal.ROUND_UP).toString());
+  }
+
+  public static String getDoubleString(double data, int place) {
+    if (data == 0) {
+      return "0";
+    }
+    // 可能会丢失精度
+//    String result = String.format("%." + place + "f", data);
+//    String[] temps = result.split("\\.");
+//    if (temps.length > 1) {
+//      result = temps[0] + "." + temps[1].substring(0, place);
+//    }
+    return new BigDecimal(Double.toString(data)).setScale(place, BigDecimal.ROUND_UP).toString();
   }
 
   public static double getDouble(AtomicInteger x, AtomicInteger y, int place) {
@@ -83,7 +99,7 @@ public class MathUtils {
   }
 
   public static double getDouble(int x, int y, int place) {
-    return getDouble((double) x / Math.max(1, y), place);
+    return getDouble(x * 1.0 / Math.max(1, y), place);
   }
 
   public static double getDouble(double x, double y, int place) {
@@ -122,7 +138,10 @@ public class MathUtils {
    */
   public static int getRandomRange(int min, int max) {
     Random random = new Random();
-    return random.nextInt(max) + min;
+    if (max < min) {
+      throw new BaseRuntimeException("最大值不能小于最小值");
+    }
+    return random.nextInt(max - min) + min;
   }
 
   /**
@@ -241,7 +260,8 @@ public class MathUtils {
     StandardDeviationResult result = new StandardDeviationResult();
     double average = list.stream().mapToDouble(value -> Double.parseDouble(value.toString())).average().orElse(-1);
     result.setAverage(average);
-    double standardDeviation = Math.sqrt(list.stream().mapToDouble(value -> Math.pow(Double.parseDouble(value.toString()) - average, 2)).sum() / list.size());
+    double standardDeviation = Math.sqrt(
+        list.stream().mapToDouble(value -> Math.pow(Double.parseDouble(value.toString()) - average, 2)).sum() / list.size());
     result.setStandardDeviation(standardDeviation);
     return result;
   }

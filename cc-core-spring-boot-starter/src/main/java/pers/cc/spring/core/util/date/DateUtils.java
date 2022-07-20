@@ -5,10 +5,7 @@ import pers.cc.spring.core.util.other.ClassUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +35,10 @@ public class DateUtils {
     return LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
   }
 
+  public static LocalDate getMonday(Date date) {
+    return toLocalDate(date).with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
+  }
+
   /**
    * 获取以现在时间为基准之后或之前天数的时间
    *
@@ -55,7 +56,7 @@ public class DateUtils {
    * @return 格式化后的结果
    */
   public static Date getDateAfterOrBeforeDay(int day) {
-    return getDateAfterOrBeforeDay(day, dateFormat);
+    return getDateAfterOrBeforeDay(new Date(), day);
   }
 
   /**
@@ -71,22 +72,20 @@ public class DateUtils {
     return new SimpleDateFormat(format).format(calendar.getTime());
   }
 
-  public static Date getDateAfterOrBeforeDay(Date date, int day) {
+  public static Date getDateAfterOrBeforeWeek(int week) {
+    return getDateAfterOrBeforeWeek(new Date(), week);
+  }
+
+  public static Date getDateAfterOrBeforeWeek(Date date, int week) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
-    calendar.add(Calendar.DAY_OF_WEEK, day);
+    calendar.add(Calendar.WEEK_OF_MONTH, week);
     return calendar.getTime();
   }
 
-  /**
-   * 获取以现在时间为基准之后或之前天数的时间
-   *
-   * @param day    天数，正负
-   * @param format 格式化
-   * @return 格式化后的结果
-   */
-  public static Date getDateAfterOrBeforeDay(int day, String format) {
+  public static Date getDateAfterOrBeforeDay(Date date, int day) {
     Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
     calendar.add(Calendar.DAY_OF_WEEK, day);
     return calendar.getTime();
   }
@@ -131,6 +130,28 @@ public class DateUtils {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     calendar.add(Calendar.HOUR, hour);
+    return calendar.getTime();
+  }
+
+  public static Date getDateAfterOrBeforeMinute(int minute) {
+    return getDateAfterOrBeforeMinute(new Date(), minute);
+  }
+
+  public static Date getDateAfterOrBeforeMinute(Date date, int minute) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.MINUTE, minute);
+    return calendar.getTime();
+  }
+
+  public static Date getDateAfterOrBeforeSecond(int seconds) {
+    return getDateAfterOrBeforeSecond(new Date(), seconds);
+  }
+
+  public static Date getDateAfterOrBeforeSecond(Date date, int seconds) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.SECOND, seconds);
     return calendar.getTime();
   }
 
@@ -413,10 +434,27 @@ public class DateUtils {
   }
 
   public static Date getTodayAtMidnight() {
+    return getTodayAtMidnight(new Date());
+  }
+
+  public static Date getTodayAtMidnight(Date date) {
     Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
     calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
         0, 0, 0);
     return calendar.getTime();
+  }
+
+  public static Date getStartOfDate(Date date) {
+    LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+    LocalDateTime result = localDateTime.with(LocalTime.MIN);
+    return toDate(result);
+  }
+
+  public static Date getEndOfDate(Date date) {
+    LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+    LocalDateTime result = localDateTime.with(LocalTime.MAX);
+    return toDate(result);
   }
 
   public static Date getDayAtMidnight(int afterOrBeforeDays) {
@@ -424,6 +462,22 @@ public class DateUtils {
     calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
         0, 0, 0);
     return new Date(calendar.getTime().getTime() + afterOrBeforeDays * 24 * 3600 * 1000);
+  }
+
+  public static Date getWeekAtMidnight(int weeks) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(toDate(getMonday(getDateAfterOrBeforeWeek(weeks))));
+    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+        0, 0, 0);
+    return new Date(calendar.getTime().getTime());
+  }
+
+  public static Date getMonthAtMidnight(int month) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(getDateAfterOrBeforeMonth(month));
+    calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1,
+        0, 0, 0);
+    return new Date(calendar.getTime().getTime());
   }
 
   public static Date getToday235959() {
@@ -466,6 +520,10 @@ public class DateUtils {
 
   public static LocalDateTime toLocalDateTime(Date date) {
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  }
+
+  public static LocalDate toLocalDate(Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
   }
 
   public static Date toDate(LocalDateTime localDateTime) {

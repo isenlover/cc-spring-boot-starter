@@ -47,6 +47,10 @@ public class PageResults<T> {
     return new PageResults<>(page, size, total, results);
   }
 
+  public static <T> PageResults<T> finish() {
+    return new PageResults<>(0, 0, 0, null);
+  }
+
   public static PageResults of(PageResults pageResults) {
     return new PageResults<>(pageResults.getPage(), pageResults.getSize(), pageResults.getTotal(), null);
   }

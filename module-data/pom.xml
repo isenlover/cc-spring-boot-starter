@@ -9,14 +9,19 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>cc-log-spring-boot-starter</artifactId>
+  <artifactId>cc-data</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>cc-data-jpa-spring-boot-starter</module>
+    <module>cc-data-elasticsearch</module>
+    <module>cc-data-redis-spring-boot-starter</module>
+    <module>cc-data-elasticsearch-spring-boot-starter</module>
+  </modules>
 
   <dependencies>
-
     <dependency>
       <groupId>pers.cc</groupId>
-      <artifactId>cc-security-jwt-spring-boot-starter</artifactId>
+      <artifactId>cc-core-spring-boot-starter</artifactId>
     </dependency>
-
   </dependencies>
 </project>

@@ -9,10 +9,10 @@
   </parent>
 
   <modules>
-    <module>cc-spring-data</module>
+    <module>module-api</module>
+    <module>module-data</module>
     <module>cc-core-spring-boot-starter</module>
-    <module>cc-spring-security</module>
-    <module>cc-spring-api</module>
+    <module>cc-security-jwt-spring-boot-starter</module>
     <module>cc-log-spring-boot-starter</module>
     <module>cc-amqp-spring-boot-starter</module>
   </modules>
@@ -40,6 +40,8 @@
     <zxing-google.version>3.3.0</zxing-google.version>
     <!--汉语拼音-->
     <pinyin.version>2.5.0</pinyin.version>
+    <!--retrofit http请求工具-->
+    <retrofit.version>2.2.21</retrofit.version>
     <!--汉语拼音-->
     <jpinyin.version>1.1.8</jpinyin.version>
     <druid.version>1.1.4</druid.version>
@@ -55,7 +57,6 @@
     <jjwt.version>0.9.1</jjwt.version>
     <!-- logstash -->
     <logstash.verion>5.0</logstash.verion>
-    <cc-spring.version>2.3.4.RELEASE</cc-spring.version>
     <!-- es 6.3.0版本 -->
     <elasticsearch.version>6.3.0</elasticsearch.version>
     <!-- 官方2.0.5.RELEASE版本较低，在此覆盖 -->
@@ -66,10 +67,21 @@
     <!--<rabbitMQ.version>3.2.6</rabbitMQ.version>-->
     <!-- 2021.1.22 https://mvnrepository.com/artifact/dom4j/dom4j -->
     <dom4j.version>1.6.1</dom4j.version>
+
+    <cc-spring.version>2.3.4.RELEASE</cc-spring.version>
+    <!--"Hoxton.SR12": "Spring Boot >=2.2.0.RELEASE and <2.4.0.M1"-->
+    <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>pers.cc</groupId>
         <artifactId>cc-core-spring-boot-starter</artifactId>
@@ -132,7 +144,7 @@
       </dependency>
       <dependency>
         <groupId>pers.cc</groupId>
-        <artifactId>cc-spring-api-core</artifactId>
+        <artifactId>cc-api-core</artifactId>
         <version>${cc-spring.version}</version>
       </dependency>
       <dependency>
@@ -184,6 +196,11 @@
         <groupId>com.alibaba</groupId>
         <artifactId>fastjson</artifactId>
         <version>${fastjson-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.lianjiatech</groupId>
+        <artifactId>retrofit-spring-boot-starter</artifactId>
+        <version>${retrofit.version}</version>
       </dependency>
       <dependency>
         <groupId>dom4j</groupId>
@@ -273,6 +290,8 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <version>1.18.22</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

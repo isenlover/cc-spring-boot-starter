@@ -117,6 +117,16 @@ public class StringUtils {
     return value.length() > maxLength ? value.substring(0, maxLength) : value;
   }
 
+  /**
+   * 去掉所有空格
+   *
+   * @param value
+   * @return
+   */
+  public static String getTrimString(String value) {
+    return value.replace(" ", "");
+  }
+
   public static String getBracketString(Object label) {
     return "(" + label + ")";
   }

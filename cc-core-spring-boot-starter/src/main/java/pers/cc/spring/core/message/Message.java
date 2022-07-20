@@ -2,6 +2,7 @@ package pers.cc.spring.core.message;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,6 +36,7 @@ public class Message<T> {
    * 详细的不合法字段提示
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonIgnore
   @ApiModelProperty("详细的不合法字段提示")
   private String errorFields;
   /**
@@ -46,6 +48,7 @@ public class Message<T> {
    * 是否成功
    */
   @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+  @JsonIgnore
   @ApiModelProperty(value = "接口调用排除异常外的结果，前端一般不用判断，一般也不会序列化到前端", example = "false")
   private boolean success;
 

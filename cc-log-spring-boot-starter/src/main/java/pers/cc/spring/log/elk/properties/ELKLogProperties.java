@@ -9,20 +9,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(
-        prefix = "log.elk"
+    prefix = "log.elk"
 )
 public class ELKLogProperties {
 
-    private String app = "logstash";
+  private String app = "logstash";
 
-    @Deprecated
-    private String remoteHost = "localhost";
+  @Deprecated
+  private String remoteHost = "localhost";
 
-    @Deprecated
-    private String remotePort = "4560";
+  @Deprecated
+  private String remotePort = "4560";
 
-    private String destination = "localhost:4560";
+  private String destination = "localhost:4560";
 
-    @Deprecated
-    private boolean open = true;
+  @Deprecated
+  private boolean open = true;
 }
